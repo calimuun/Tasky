@@ -10,7 +10,7 @@ import androidx.room.TypeConverters
 	entities = [TaskEntity::class, RoutineEntity::class, TaskCompletedEntity::class],
 	version = 1
 )
-@TypeConverters(DatetimeConverter::class)
+@TypeConverters(TypeConverters::class)
 abstract class AppDatabase : RoomDatabase() {
 	abstract fun taskDao(): TaskDao
 	abstract fun routineDao(): RoutineDao

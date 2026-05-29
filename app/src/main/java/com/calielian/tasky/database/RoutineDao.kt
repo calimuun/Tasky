@@ -5,7 +5,8 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDateTime
+import java.time.LocalDate
+import java.time.LocalTime
 
 @Dao
 interface RoutineDao {
@@ -33,6 +34,12 @@ interface RoutineDao {
 	@Query("UPDATE Routine SET title = :title WHERE id = :id")
 	suspend fun updateRoutineTitle(id: Int, title: String)
 
-	@Query("UPDATE Routine SET datetime = :datetime WHERE id = :id")
-	suspend fun updateRoutineDate(id: Int, datetime: LocalDateTime)
+	@Query("UPDATE Routine SET date = :date, time = :time WHERE id = :id")
+	suspend fun updateRoutineDateTime(id: Int, date: LocalDate, time: LocalTime)
+
+	@Query("UPDATE Routine SET date = :date WHERE id = :id")
+	suspend fun updateRoutineDate(id: Int, date: LocalDate)
+
+	@Query("UPDATE Routine SET time = :time WHERE id = :id")
+	suspend fun updateRoutineTime(id: Int, time: LocalTime)
 }

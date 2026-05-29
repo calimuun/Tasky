@@ -3,14 +3,16 @@ package com.calielian.tasky.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDateTime
+import java.time.LocalDate
+import java.time.LocalTime
 
 @Entity(
 	tableName = "TaskCompleted"
 )
 data class TaskCompletedEntity (
 	@PrimaryKey(autoGenerate = true) val id: Int = 0,
-	@ColumnInfo(name = "title") val title: String?,
+	@ColumnInfo(name = "title") val title: String,
 	@ColumnInfo(name = "description") val description: String?,
-	@ColumnInfo(name = "datetime") val date: LocalDateTime?
+	@ColumnInfo(name = "date") val date: LocalDate?,
+	@ColumnInfo(name = "time") val time: LocalTime?
 )

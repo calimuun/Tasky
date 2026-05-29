@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
+import java.time.LocalDate
+import java.time.LocalTime
 
 class TaskViewModel(private val dao: TaskDao) : ViewModel() {
 
@@ -56,15 +57,21 @@ class TaskViewModel(private val dao: TaskDao) : ViewModel() {
 		}
 	}
 
-	fun updateDateTime(id: Int, datetime: LocalDateTime) {
+	fun updateDateTime(id: Int, date: LocalDate, time: LocalTime) {
 		viewModelScope.launch {
-			dao.updateTaskDate(id, datetime)
+			dao.updateTaskDateTime(id, date, time)
 		}
 	}
 
-	fun resetTableIds() {
+	fun updateDate(id: Int, date: LocalDate) {
 		viewModelScope.launch {
-			dao.resetId()
+			dao.updateTaskDate(id, date)
+		}
+	}
+
+	fun updateTime(id: Int, time: LocalTime) {
+		viewModelScope.launch {
+			dao.updateTaskTime(id, time)
 		}
 	}
 }

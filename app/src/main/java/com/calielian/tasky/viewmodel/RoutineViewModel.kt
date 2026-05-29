@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
+import java.time.LocalDate
+import java.time.LocalTime
 
 class RoutineViewModel(private val dao: RoutineDao) : ViewModel() {
 	val allRoutines: StateFlow<List<RoutineEntity>> = dao.getAllRoutines()
@@ -55,15 +56,21 @@ class RoutineViewModel(private val dao: RoutineDao) : ViewModel() {
 		}
 	}
 
-	fun updateDateTime(id: Int, datetime: LocalDateTime) {
+	fun updateDateTime(id: Int, date: LocalDate, time: LocalTime) {
 		viewModelScope.launch {
-			dao.updateRoutineDate(id, datetime)
+			dao.updateRoutineDateTime(id, date, time)
 		}
 	}
 
-	fun resetTableIds() {
+	fun updateDate(id: Int, date: LocalDate) {
 		viewModelScope.launch {
-			dao.resetId()
+			dao.updateRoutineDate(id, date)
+		}
+	}
+
+	fun updateTime(id: Int, time: LocalTime) {
+		viewModelScope.launch {
+			dao.updateRoutineTime(id, time)
 		}
 	}
 }
