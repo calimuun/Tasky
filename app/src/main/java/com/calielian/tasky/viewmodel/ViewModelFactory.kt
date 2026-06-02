@@ -5,13 +5,17 @@ import androidx.lifecycle.ViewModelProvider
 import com.calielian.tasky.database.RoutineDao
 import com.calielian.tasky.database.TaskCompletedDao
 import com.calielian.tasky.database.TaskDao
+import com.calielian.tasky.database.TaskRepository
 
-class TaskViewModelFactory(private val dao: TaskDao) : ViewModelProvider.Factory {
+class TaskViewModelFactory(
+	private val dao: TaskDao,
+	private val repository: TaskRepository
+) : ViewModelProvider.Factory {
 
 	@Suppress("UNCHECKED_CAST")
 	override fun <T : ViewModel> create(modelClass: Class<T>): T {
 		if (modelClass.isAssignableFrom(TaskViewModel::class.java)) {
-			return TaskViewModel(dao) as T
+			return TaskViewModel(dao, repository) as T
 		}
 		throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
 	}

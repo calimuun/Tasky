@@ -4,4 +4,21 @@
 	<string name="routine_title">Routine</string>
 	<string name="more_title">More</string>
 	<string name="placeholder" translatable="false">Lorem Ipsum</string>
+	<string name="content_desc_close">Exit page</string>
+	<string name="edit_task_title">Edit task</string>
+	<string name="edit_routine_title">Edit routine</string>
+	<string name="save_button">Save</string>
+	<string name="task_title_input_hint">Task\'s title*</string>
+	<string name="task_description_input_hint">Task\'s description</string>
+	<string name="required_input">* required</string>
+	<string name="content_desc_date">Select date</string>
+	<string name="content_desc_time">Select time</string>
+	<string name="placeholder_date" translatable="false">25/05</string>
+	<string name="placeholder_time" translatable="false">07:30</string>
+	<string name="date_picker_title">Select the date</string>
+	<string name="time_picker_title">Select the time</string>
+	<string name="routine_title_input_hint">Routine\'s title*</string>
+	<string name="routine_description_input_hint">Routine\'s description</string>
+	<string name="required_input_error">This input is required</string>
+	<string name="time_past_error">It\'s not possible to select past time</string>
 </resources>

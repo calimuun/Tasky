@@ -3,4 +3,19 @@
 	<string name="task_title">Tarefa</string>
 	<string name="routine_title">Rotina</string>
 	<string name="more_title">Mais</string>
+	<string name="content_desc_close">Sair da página</string>
+	<string name="edit_task_title">Editar tarefa</string>
+	<string name="edit_routine_title">Editar rotina</string>
+	<string name="save_button">Salvar</string>
+	<string name="task_title_input_hint">Título da tarefa*</string>
+	<string name="task_description_input_hint">Descrição da tarefa</string>
+	<string name="required_input">* obrigatório</string>
+	<string name="content_desc_date">Selecione a data</string>
+	<string name="content_desc_time">Selecione o horário</string>
+	<string name="date_picker_title">Selecione a data</string>
+	<string name="time_picker_title">Selecione o horário</string>
+	<string name="routine_title_input_hint">Título da rotina*</string>
+	<string name="routine_description_input_hint">Descrição da rotina</string>
+	<string name="required_input_error">Esse campo não pode estar vazio</string>
+	<string name="time_past_error">Não é possível selecionar horário passado</string>
 </resources>

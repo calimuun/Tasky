@@ -14,10 +14,10 @@ class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHold
 	private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
 	fun bindTask(task: TaskEntity, onCheckedChange: (TaskEntity) -> Unit, onClick: (TaskEntity) -> Unit) {
-		var dateText: String = ""
+		var dateText = ""
 		binding.itemName.text = task.title
 
-		if (task.description != null) {
+		if (!task.description.isNullOrBlank()) {
 			binding.itemDescription.text = task.description
 		} else {
 			binding.itemDescription.visibility = View.GONE
@@ -32,7 +32,7 @@ class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHold
 			dateText = dateText.trim()
 		}
 
-		if (dateText != "") {
+		if (dateText.isNotBlank()) {
 			binding.itemDate.text = dateText
 		} else {
 			binding.itemDate.visibility = View.GONE
@@ -48,10 +48,10 @@ class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHold
  	}
 
 	fun bindRoutine(routine: RoutineEntity, onCheckedChange: (RoutineEntity) -> Unit, onClick: (RoutineEntity) -> Unit) {
-		var dateText: String = ""
+		var dateText = ""
 		binding.itemName.text = routine.title
 
-		if (routine.description != null) {
+		if (!routine.description.isNullOrBlank()) {
 			binding.itemDescription.text = routine.description
 		} else {
 			binding.itemDescription.visibility = View.GONE
@@ -82,7 +82,7 @@ class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHold
 	}
 
 	fun bindCompletedTask(task: TaskCompletedEntity, onCheckedChange: (TaskCompletedEntity) -> Unit) {
-		var dateText: String = ""
+		var dateText = ""
 		binding.itemName.text = task.title
 
 		if (task.description != null) {
