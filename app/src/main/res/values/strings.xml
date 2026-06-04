@@ -21,4 +21,9 @@
 	<string name="routine_description_input_hint">Routine\'s description</string>
 	<string name="required_input_error">This input is required</string>
 	<string name="time_past_error">It\'s not possible to select past time</string>
+	<string name="completed_tasks_option">See completed tasks</string>
+	<string name="delete_all_tasks_option">Delete all tasks</string>
+	<string name="delete_all_routines_option">Delete all routines</string>
+	<string name="app_description">A task and routine manager</string>
+	<string name="version">VERSION: v</string>
 </resources>

@@ -32,12 +32,15 @@ class RoutineViewModelFactory(private val dao: RoutineDao) : ViewModelProvider.F
 	}
 }
 
-class TaskCompletedViewModelFactory(private val dao: TaskCompletedDao) : ViewModelProvider.Factory {
+class TaskCompletedViewModelFactory(
+	private val dao: TaskCompletedDao,
+	private val repository: TaskRepository
+) : ViewModelProvider.Factory {
 
 	@Suppress("UNCHECKED_CAST")
 	override fun <T : ViewModel> create(modelClass: Class<T>): T {
 		if (modelClass.isAssignableFrom(TaskCompletedViewModel::class.java)) {
-			return TaskCompletedViewModel(dao) as T
+			return TaskCompletedViewModel(dao, repository) as T
 		}
 		throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
 	}

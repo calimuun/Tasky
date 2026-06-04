@@ -89,7 +89,7 @@ class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHold
 		var dateText = ""
 		binding.itemName.text = task.title
 
-		if (task.description != null) {
+		if (!task.description.isNullOrBlank()) {
 			binding.itemDescription.text = task.description
 		} else {
 			binding.itemDescription.visibility = View.GONE

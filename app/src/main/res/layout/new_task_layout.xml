@@ -66,8 +66,6 @@
 			android:visibility="gone"
 			tools:visibility="visible"
 
-			app:chipIcon="@drawable/ic_calendar"
-			app:chipIconTint="?attr/colorPrimary"
 			app:closeIcon="@drawable/ic_close"
 			app:closeIconEnabled="true"
 			app:closeIconVisible="true"
@@ -81,7 +79,6 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:contentDescription="@string/content_desc_time"
-			android:layout_marginStart="15dp"
 
 			app:icon="@drawable/ic_clock" />
 
@@ -95,8 +92,6 @@
 			android:visibility="gone"
 			tools:visibility="visible"
 
-			app:chipIcon="@drawable/ic_clock"
-			app:chipIconTint="?attr/colorPrimary"
 			app:closeIcon="@drawable/ic_close"
 			app:closeIconEnabled="true"
 			app:closeIconVisible="true"

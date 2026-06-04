@@ -45,6 +45,7 @@ class TaskFragment : Fragment() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+
 		exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
 		reenterTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
 	}

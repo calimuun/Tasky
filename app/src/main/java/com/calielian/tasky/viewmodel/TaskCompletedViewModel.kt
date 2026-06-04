@@ -4,12 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.calielian.tasky.database.TaskCompletedDao
 import com.calielian.tasky.database.TaskCompletedEntity
+import com.calielian.tasky.database.TaskRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class TaskCompletedViewModel(private val dao: TaskCompletedDao) : ViewModel() {
+class TaskCompletedViewModel(
+	private val dao: TaskCompletedDao,
+	private val repository: TaskRepository
+) : ViewModel() {
 
 	val allCompletedTasks: StateFlow<List<TaskCompletedEntity>> = dao.getAllCompletedTasks()
 		.stateIn(
@@ -17,12 +21,6 @@ class TaskCompletedViewModel(private val dao: TaskCompletedDao) : ViewModel() {
 			started = SharingStarted.WhileSubscribed(5000),
 			initialValue = emptyList()
 		)
-
-	fun insertTask(task: TaskCompletedEntity) {
-		viewModelScope.launch {
-			dao.insert(task)
-		}
-	}
 
 	fun deleteTask(task: TaskCompletedEntity) {
 		viewModelScope.launch {
@@ -40,6 +38,12 @@ class TaskCompletedViewModel(private val dao: TaskCompletedDao) : ViewModel() {
 	fun deleteTaskById(id: Int) {
 		viewModelScope.launch {
 			dao.deleteTaskCompleted(id)
+		}
+	}
+
+	fun uncompleteTask(task: TaskCompletedEntity) {
+		viewModelScope.launch {
+			repository.uncompleteTask(task)
 		}
 	}
 }

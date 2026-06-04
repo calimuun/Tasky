@@ -1,13 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
+
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:paddingStart="10dp"
+	android:paddingEnd="10dp"
+	android:orientation="vertical"
+
 	tools:context=".MoreFragment">
 
-	<TextView
+	<com.google.android.material.card.MaterialCardView
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:text="More Fragment" />
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="20dp"
 
-</FrameLayout>
+		app:cardBackgroundColor="?attr/colorSurfaceContainer"
+		app:strokeWidth="0dp" >
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:padding="10dp">
+			<ImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/app_icon_scaled"
+				android:background="@drawable/icon_background"
+				android:tint="?attr/colorOnSurfaceInverse"
+				android:layout_marginEnd="20dp" />
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="vertical" >
+				<TextView
+					style="?attr/textAppearanceTitleLargeEmphasized"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/app_name"
+					android:layout_marginBottom="2dp"/>
+
+				<TextView
+					style="?attr/textAppearanceBodyMedium"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/app_description"
+					android:layout_marginBottom="1dp"/>
+
+				<TextView
+					android:id="@+id/app_version"
+					style="?attr/textAppearanceBodySmall"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/placeholder" />
+			</LinearLayout>
+
+		</LinearLayout>
+
+	</com.google.android.material.card.MaterialCardView>
+
+	<com.google.android.material.card.MaterialCardView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+
+		app:cardBackgroundColor="?attr/colorSurfaceContainer"
+		app:strokeWidth="0dp">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:showDividers="middle"
+			android:divider="@drawable/more_options_divider" >
+
+			<LinearLayout
+				android:id="@+id/see_completed_tasks"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:minHeight="48dp"
+				android:padding="10dp"
+				android:gravity="center_vertical"
+				android:clickable="true"
+
+				android:background="?attr/selectableItemBackground">
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_done"
+					android:layout_marginEnd="10dp"
+
+					app:tint="?attr/colorOnSurface"/>
+
+				<TextView
+					style="?attr/textAppearanceBodyMedium"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/completed_tasks_option" />
+
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1" />
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_chevron_right"
+
+					app:tint="?attr/colorOnSurface" />
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:id="@+id/delete_tasks"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:minHeight="48dp"
+				android:padding="10dp"
+				android:gravity="center_vertical"
+				android:clickable="true"
+				android:background="?attr/selectableItemBackground">
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_delete_forever"
+					android:layout_marginEnd="10dp"
+
+					app:tint="?attr/colorOnSurface"/>
+
+				<TextView
+					style="?attr/textAppearanceBodyMedium"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/delete_all_tasks_option"/>
+
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:id="@+id/delete_routines"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:minHeight="48dp"
+				android:padding="10dp"
+				android:gravity="center_vertical"
+				android:clickable="true"
+				android:background="?attr/selectableItemBackground">
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_delete_forever"
+					android:layout_marginEnd="10dp"
+
+					app:tint="?attr/colorOnSurface"/>
+
+				<TextView
+					style="?attr/textAppearanceBodyMedium"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/delete_all_routines_option" />
+
+			</LinearLayout>
+
+		</LinearLayout>
+
+	</com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

@@ -1,9 +1,6 @@
 package com.calielian.tasky.database
 
 import androidx.room.withTransaction
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
 
 class TaskRepository(
 	private val database: AppDatabase,
@@ -24,16 +21,8 @@ class TaskRepository(
 
 	}
 
-	suspend fun uncompleteTask(completedTask: TaskCompletedEntity): Boolean {
-		return database.withTransaction {
-			val taskDateTime = LocalDateTime.of(
-				completedTask.date ?: LocalDate.now(),
-				completedTask.time ?: LocalTime.MIN
-			)
-			if (taskDateTime.isBefore(LocalDateTime.now())) {
-				return@withTransaction false
-			}
-
+	suspend fun uncompleteTask(completedTask: TaskCompletedEntity) {
+		database.withTransaction {
 			val task = TaskEntity(
 				title = completedTask.title,
 				description = completedTask.description,
@@ -42,8 +31,6 @@ class TaskRepository(
 			)
 			taskCompletedDao.delete(completedTask)
 			taskDao.insert(task)
-
-			true
 		}
 	}
 }

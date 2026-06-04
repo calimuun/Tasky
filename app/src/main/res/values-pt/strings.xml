@@ -18,4 +18,9 @@
 	<string name="routine_description_input_hint">Descrição da rotina</string>
 	<string name="required_input_error">Esse campo não pode estar vazio</string>
 	<string name="time_past_error">Não é possível selecionar horário passado</string>
+	<string name="completed_tasks_option">Ver tarefas concluídas</string>
+	<string name="delete_all_tasks_option">Apagar todas as tarefas</string>
+	<string name="delete_all_routines_option">Apagar todas as rotinas</string>
+	<string name="app_description">Um gerenciador de tarefas e rotina</string>
+	<string name="version">VERSÃO: v</string>
 </resources>
