@@ -164,6 +164,14 @@ class TaskFragment : Fragment() {
 			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 				viewModel.allTasks.collect { list ->
 					adapter.submitList(list)
+
+					if (list.isEmpty()) {
+						binding.emptyStateContainer.visibility = View.VISIBLE
+						binding.taskRecyclerview.visibility = View.GONE
+					} else {
+						binding.emptyStateContainer.visibility = View.GONE
+						binding.taskRecyclerview.visibility = View.VISIBLE
+					}
 				}
 			}
 		}

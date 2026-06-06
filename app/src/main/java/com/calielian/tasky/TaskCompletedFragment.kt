@@ -59,6 +59,14 @@ class TaskCompletedFragment : Fragment() {
 			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 				viewModel.allCompletedTasks.collect { list ->
 					adapter.submitList(list)
+
+					if (list.isEmpty()) {
+						binding.emptyStateContainer.visibility = View.VISIBLE
+						binding.taskCompletedRecyclerview.visibility = View.GONE
+					} else {
+						binding.emptyStateContainer.visibility = View.GONE
+						binding.taskCompletedRecyclerview.visibility = View.VISIBLE
+					}
 				}
 			}
 		}

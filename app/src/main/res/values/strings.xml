@@ -40,4 +40,8 @@
 	<string name="cancel">Cancel</string>
 	<string name="delete">Delete</string>
 	<string name="deletion_completed">All data has been deleted successfully</string>
+	<string name="no_pending_tasks">No pending tasks.</string>
+	<string name="no_routines_setted">No routines setted.</string>
+	<string name="no_completed_tasks">No completed tasks.</string>
+	<string name="tap_plus_to_add">Tap the + button to add!</string>
 </resources>

@@ -148,13 +148,21 @@ class RoutineFragment : Fragment() {
 			}
 		}
 
-		binding.taskRecyclerview.layoutManager = LinearLayoutManager(context)
-		binding.taskRecyclerview.adapter = adapter
+		binding.routineRecyclerview.layoutManager = LinearLayoutManager(context)
+		binding.routineRecyclerview.adapter = adapter
 
 		lifecycleScope.launch {
 			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 				viewModel.allRoutines.collect { list ->
 					adapter.submitList(list)
+
+					if (list.isEmpty()) {
+						binding.emptyStateContainer.visibility = View.VISIBLE
+						binding.routineRecyclerview.visibility = View.GONE
+					} else {
+						binding.emptyStateContainer.visibility = View.GONE
+						binding.routineRecyclerview.visibility = View.VISIBLE
+					}
 				}
 			}
 		}

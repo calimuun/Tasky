@@ -37,4 +37,8 @@
 	<string name="cancel">Cancelar</string>
 	<string name="delete">Apagar</string>
 	<string name="deletion_completed">Todos os dados foram apagados com sucesso</string>
+	<string name="no_pending_tasks">Nenhuma tarefa pendente.</string>
+	<string name="no_routines_setted">Nenhuma rotina configurada.</string>
+	<string name="no_completed_tasks">Nenhuma tarefa concluída.</string>
+	<string name="tap_plus_to_add">Toque no botão + para adicionar!</string>
 </resources>
