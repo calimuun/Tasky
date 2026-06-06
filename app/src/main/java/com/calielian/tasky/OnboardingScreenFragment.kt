@@ -33,6 +33,8 @@ class OnboardingScreenFragment : Fragment() {
 				dataStore.setUsername(username)
 				dataStore.setFirstTime(false)
 
+				(activity as? MainActivity)?.setGreetingText(", $username!")
+
 				kotlinx.coroutines.delay(300)
 
 				parentFragmentManager.beginTransaction()
@@ -49,8 +51,6 @@ class OnboardingScreenFragment : Fragment() {
 		binding.viewPager.adapter = adapter
 
 		TabLayoutMediator(binding.tabLayout, binding.viewPager) { _, _ -> }.attach()
-
-
 	}
 
 	private fun getOnboardPages(): List<OnboardPageItem> {
@@ -64,12 +64,12 @@ class OnboardingScreenFragment : Fragment() {
 
 	override fun onResume() {
 		super.onResume()
-		(activity as? MainActivity)?.setNavBarVisibility(false)
+		(activity as? MainActivity)?.setUIVisibility(false)
 	}
 
 	override fun onStop() {
 		super.onStop()
-		(activity as? MainActivity)?.setNavBarVisibility(true)
+		(activity as? MainActivity)?.setUIVisibility(true)
 	}
 
 	override fun onDestroy() {

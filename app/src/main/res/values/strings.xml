@@ -29,4 +29,8 @@
 	<string name="onboard_last_page_text">todo</string>
 	<string name="onboard_last_page_button_text">Go to my tasks</string>
 	<string name="onboard_last_page_input_hint">Type your username</string>
+	<string name="good_morning">Good morning</string>
+	<string name="good_afternoon">Good afternoon</string>
+	<string name="good_night">Good night</string>
+	<string name="user_placeholder">User</string>
 </resources>
