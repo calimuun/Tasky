@@ -26,4 +26,7 @@
 	<string name="delete_all_routines_option">Delete all routines</string>
 	<string name="app_description">A task and routine manager</string>
 	<string name="version">VERSION: v</string>
+	<string name="onboard_last_page_text">todo</string>
+	<string name="onboard_last_page_button_text">Go to my tasks</string>
+	<string name="onboard_last_page_input_hint">Type your username</string>
 </resources>

@@ -12,6 +12,8 @@ recyclerview = "1.4.0"
 room_version = "2.8.4"
 lifecycle = "2.10.0"
 fragment = "1.8.9"
+coreSplashscreen = "1.2.0"
+datastore = "1.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -29,6 +31,8 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 androidx-fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
+androidx-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-datastore-preferences = {group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

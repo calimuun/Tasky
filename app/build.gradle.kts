@@ -56,6 +56,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.fragment)
+    implementation(libs.androidx.splashscreen)
+    implementation(libs.androidx.datastore.preferences)
 
     ksp(libs.androidx.room.compiler)
 
