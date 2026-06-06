@@ -30,4 +30,11 @@
 	<string name="good_afternoon">Boa tarde</string>
 	<string name="good_night">Boa noite</string>
 	<string name="user_placeholder">Usuário</string>
+	<string name="delete_all_tasks_title">Apagar todas as tarefas?</string>
+	<string name="delete_all_routines_title">Apagar todas as rotinas?</string>
+	<string name="delete_all_tasks_message">Todas as tarefas pendentes e concluídas serão apagadas permanentemente!</string>
+	<string name="delete_all_routines_message">Todas as rotinas configuradas serão apagadas permanentemente!</string>
+	<string name="cancel">Cancelar</string>
+	<string name="delete">Apagar</string>
+	<string name="deletion_completed">Todos os dados foram apagados com sucesso</string>
 </resources>

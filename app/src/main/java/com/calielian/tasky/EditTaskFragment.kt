@@ -188,6 +188,16 @@ class EditTaskFragment : Fragment() {
 
 			parentFragmentManager.popBackStack()
 		}
+
+		binding.deleteButton.setOnClickListener {
+			if (fragmentType == "task") {
+				taskViewModel.deleteTaskById(taskId!!)
+			} else {
+				routineViewModel.deleteRoutineById(taskId!!)
+			}
+
+			parentFragmentManager.popBackStack()
+		}
 	}
 
 	override fun onDestroy() {

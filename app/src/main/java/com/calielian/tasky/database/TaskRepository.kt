@@ -33,4 +33,14 @@ class TaskRepository(
 			taskDao.insert(task)
 		}
 	}
+
+	suspend fun deleteAllTasks() {
+		database.withTransaction {
+			taskDao.deleteAllTasks()
+			taskCompletedDao.deleteAllCompletedTasks()
+
+			taskDao.resetId()
+			taskCompletedDao.resetId()
+		}
+	}
 }

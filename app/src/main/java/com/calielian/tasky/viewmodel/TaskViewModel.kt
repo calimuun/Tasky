@@ -36,8 +36,7 @@ class TaskViewModel(
 
 	fun deleteAllTasks() {
 		viewModelScope.launch {
-			dao.deleteAllTasks()
-			dao.resetId()
+			repository.deleteAllTasks()
 		}
 	}
 
