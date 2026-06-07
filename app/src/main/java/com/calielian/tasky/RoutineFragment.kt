@@ -19,11 +19,15 @@ import com.calielian.tasky.recyclercomponents.RoutineAdapter
 import com.calielian.tasky.viewmodel.RoutineViewModel
 import com.calielian.tasky.viewmodel.RoutineViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import nl.dionsegijn.konfetti.core.Party
+import nl.dionsegijn.konfetti.core.emitter.Emitter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.TimeUnit
 
 class RoutineFragment : Fragment() {
 	private var _binding: FragmentRoutineBinding? = null
@@ -31,6 +35,9 @@ class RoutineFragment : Fragment() {
 
 	private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM")
 	private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+
+	var isNotEmpty = false
+	lateinit var party: Party
 
 	private val viewModel: RoutineViewModel by lazy {
 		val app = requireActivity().application as App
@@ -46,6 +53,15 @@ class RoutineFragment : Fragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+
+		party = Party(
+			speed = 0f,
+			maxSpeed = 30f,
+			damping = 0.9f,
+			spread = 360,
+			colors = listOf(0x5248cf, 0x1b155b, 0x03002d, 0x958dfd),
+			emitter = Emitter(duration = 100, TimeUnit.MILLISECONDS).max(100)
+		)
 
 		binding.fabAddTask.setOnClickListener {
 			val bottomSheet = BottomSheetDialog(requireContext())
@@ -153,15 +169,27 @@ class RoutineFragment : Fragment() {
 
 		lifecycleScope.launch {
 			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+				delay(100)
+
 				viewModel.allRoutines.collect { list ->
 					adapter.submitList(list)
 
 					if (list.isEmpty()) {
+						isNotEmpty = false
 						binding.emptyStateContainer.visibility = View.VISIBLE
 						binding.routineRecyclerview.visibility = View.GONE
 					} else {
+						isNotEmpty = true
 						binding.emptyStateContainer.visibility = View.GONE
 						binding.routineRecyclerview.visibility = View.VISIBLE
+					}
+
+					for (routine: RoutineEntity in list) {
+						if (!routine.checked) return@collect
+					}
+					if (isNotEmpty) {
+						binding.konfetti.start(party)
 					}
 				}
 			}

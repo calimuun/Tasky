@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.fragment)
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.konfetti.xml)
 
     ksp(libs.androidx.room.compiler)
 }

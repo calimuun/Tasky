@@ -22,10 +22,13 @@ import com.calielian.tasky.viewmodel.TaskViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.transition.MaterialSharedAxis
 import kotlinx.coroutines.launch
+import nl.dionsegijn.konfetti.core.Party
+import nl.dionsegijn.konfetti.core.emitter.Emitter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.TimeUnit
 
 class TaskFragment : Fragment() {
 
@@ -34,6 +37,9 @@ class TaskFragment : Fragment() {
 
 	private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM")
 	private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+
+	var isEmptyAfterElement = false
+	lateinit var party: Party
 
 	private val viewModel: TaskViewModel by lazy {
 		val app = requireActivity().application as App
@@ -57,6 +63,15 @@ class TaskFragment : Fragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+
+		party = Party(
+			speed = 0f,
+			maxSpeed = 30f,
+			damping = 0.9f,
+			spread = 360,
+			colors = listOf(0x5248cf, 0x1b155b, 0x03002d, 0x958dfd),
+			emitter = Emitter(duration = 100, TimeUnit.MILLISECONDS).max(100)
+		)
 
 		binding.fabAddTask.setOnClickListener {
 			val bottomSheet = BottomSheetDialog(requireContext())
@@ -168,7 +183,13 @@ class TaskFragment : Fragment() {
 					if (list.isEmpty()) {
 						binding.emptyStateContainer.visibility = View.VISIBLE
 						binding.taskRecyclerview.visibility = View.GONE
+
+						if (isEmptyAfterElement) {
+							binding.konfetti.start(party)
+							isEmptyAfterElement = false
+						}
 					} else {
+						isEmptyAfterElement = true
 						binding.emptyStateContainer.visibility = View.GONE
 						binding.taskRecyclerview.visibility = View.VISIBLE
 					}

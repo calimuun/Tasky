@@ -11,6 +11,7 @@ import com.calielian.tasky.recyclercomponents.OnboardingAdapter
 import com.calielian.tasky.utils.AppDataStore
 import com.calielian.tasky.utils.OnboardPageItem
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class OnboardingScreenFragment : Fragment() {
@@ -35,7 +36,7 @@ class OnboardingScreenFragment : Fragment() {
 
 				(activity as? MainActivity)?.setGreetingText(", $username!")
 
-				kotlinx.coroutines.delay(300)
+				delay(300)
 
 				parentFragmentManager.beginTransaction()
 					.setCustomAnimations(

@@ -48,6 +48,11 @@
 			android:textColor="?attr/colorOnSurfaceVariant" />
 	</LinearLayout>
 
+	<nl.dionsegijn.konfetti.xml.KonfettiView
+		android:id="@+id/konfetti"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" />
+
 	<com.google.android.material.floatingactionbutton.FloatingActionButton
 		android:id="@+id/fab_add_task"
 		android:layout_width="wrap_content"
