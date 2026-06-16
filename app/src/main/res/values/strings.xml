@@ -14,7 +14,7 @@
 	<string name="content_desc_date">Select date</string>
 	<string name="content_desc_time">Select time</string>
 	<string name="placeholder_date" translatable="false">25/05</string>
-	<string name="placeholder_time" translatable="false">07:30</string>
+	<string name="placeholder_time" translatable="false">19:30</string>
 	<string name="date_picker_title">Select the date</string>
 	<string name="time_picker_title">Select the time</string>
 	<string name="routine_title_input_hint">Routine\'s title*</string>
@@ -44,4 +44,8 @@
 	<string name="no_routines_setted">No routines setted.</string>
 	<string name="no_completed_tasks">No completed tasks.</string>
 	<string name="tap_plus_to_add">Tap the + button to add!</string>
+	<string name="notification_task_channel_description">Channel for receiving tasks notifications</string>
+	<string name="onboard_permission_page_text">Tasky has notification support.\nTo make notifications to work, you need to grant these permissions:</string>
+	<string name="alarms_permission">Alarms and reminders</string>
+	<string name="notifications_permission">Notifications</string>
 </resources>

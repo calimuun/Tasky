@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:gravity="center"
+	android:paddingStart="10dp"
+	android:paddingEnd="10dp" >
+
+	<TextView
+		style="?attr/textAppearanceBody1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/onboard_permission_page_text"
+		android:justificationMode="inter_word"
+		android:layout_marginBottom="15dp"/>
+
+	<com.google.android.material.card.MaterialCardView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+
+		app:cardBackgroundColor="?attr/colorSurfaceContainer"
+		app:strokeWidth="0dp">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:showDividers="middle"
+			android:divider="@drawable/more_options_divider" >
+
+			<LinearLayout
+				android:id="@+id/notification_permission_button"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:minHeight="48dp"
+				android:padding="10dp"
+				android:gravity="center_vertical"
+				android:clickable="true"
+
+				android:background="?attr/selectableItemBackground">
+
+				<ImageView
+					android:id="@+id/notification_permission_button_icon"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_notifications_off"
+					android:layout_marginEnd="10dp"
+
+					app:tint="?attr/colorOnSurface"/>
+
+				<TextView
+					style="?attr/textAppearanceBodyMedium"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/notifications_permission" />
+
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1" />
+
+				<ImageView
+					android:id="@+id/notification_permission_button_chevron"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_chevron_right"
+
+					app:tint="?attr/colorOnSurface" />
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:id="@+id/alarm_permission_button"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:minHeight="48dp"
+				android:padding="10dp"
+				android:gravity="center_vertical"
+				android:clickable="true"
+				android:background="?attr/selectableItemBackground">
+
+				<ImageView
+					android:id="@+id/alarm_permission_button_icon"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_alarm_clock_off"
+					android:layout_marginEnd="10dp"
+
+					app:tint="?attr/colorOnSurface"/>
+
+				<TextView
+					style="?attr/textAppearanceBodyMedium"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/alarms_permission"/>
+
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1" />
+
+				<ImageView
+					android:id="@+id/alarm_permission_button_chevron"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_chevron_right"
+
+					app:tint="?attr/colorOnSurface" />
+
+			</LinearLayout>
+
+		</LinearLayout>
+
+	</com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

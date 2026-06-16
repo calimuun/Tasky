@@ -17,6 +17,8 @@ import com.calielian.tasky.database.TaskRepository
 import com.calielian.tasky.databinding.FragmentTaskBinding
 import com.calielian.tasky.databinding.NewTaskLayoutBinding
 import com.calielian.tasky.recyclercomponents.TaskAdapter
+import com.calielian.tasky.utils.AlarmScheduler
+import com.calielian.tasky.utils.AppDataStore
 import com.calielian.tasky.viewmodel.TaskViewModel
 import com.calielian.tasky.viewmodel.TaskViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -64,6 +66,8 @@ class TaskFragment : Fragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
+		val dataStore = AppDataStore(requireContext())
+
 		party = Party(
 			speed = 0f,
 			maxSpeed = 30f,
@@ -79,7 +83,7 @@ class TaskFragment : Fragment() {
 			bottomSheet.setContentView(menuBinding.root)
 
 			var newTaskDate: LocalDate? = null
-			var newDateTime: LocalTime? = null
+			var newTaskTime: LocalTime? = null
 
 			menuBinding.taskTitleInput.doOnTextChanged { _, _, _, _ ->
 				if (menuBinding.taskTitleInput.text.isNullOrEmpty()) {
@@ -107,7 +111,7 @@ class TaskFragment : Fragment() {
 					if (selectedDateTime.isAfter(now)) {
 						menuBinding.timeChip.text = time.format(timeFormatter)
 						menuBinding.timeChip.visibility = View.VISIBLE
-						newDateTime = time
+						newTaskTime = time
 					} else {
 						Toast.makeText(context, getString(R.string.time_past_error), Toast.LENGTH_SHORT).show()
 					}
@@ -121,7 +125,7 @@ class TaskFragment : Fragment() {
 
 			menuBinding.timeChip.setOnCloseIconClickListener {
 				menuBinding.timeChip.visibility = View.GONE
-				newDateTime = null
+				newTaskTime = null
 			}
 
 			menuBinding.saveButton.setOnClickListener {
@@ -135,12 +139,31 @@ class TaskFragment : Fragment() {
 
 				val description = menuBinding.taskDescriptionInput.text.toString().trim()
 
-				viewModel.insertTask(TaskEntity(
+				val newTask = TaskEntity(
 					title = title,
 					description = description,
 					date = newTaskDate,
-					time = newDateTime
-				))
+					time = newTaskTime
+				)
+
+				viewModel.insertTask(newTask)
+
+				if (newTaskDate != null || newTaskTime != null) {
+					val taskToSchedule = if (newTaskDate != null && newTaskTime == null) {
+						// todo: what if the default alarm time is in past?
+						newTask.copy(
+							time = LocalTime.parse(
+								dataStore.getDefaultAlarmTime().toString()
+							)
+						)
+					} else if (newTaskDate == null) {
+						newTask.copy(date = LocalDate.now())
+					} else {
+						newTask.copy()
+					}
+
+					AlarmScheduler.schedule(requireContext(), taskToSchedule)
+				}
 
 				bottomSheet.dismiss()
 			}
@@ -151,6 +174,7 @@ class TaskFragment : Fragment() {
 		val adapter = TaskAdapter().apply {
 			onCheckedChange = { task ->
 				viewModel.completeTask(task)
+				AlarmScheduler.cancel(requireContext(), task.id)
 			}
 
 			onClick = { task ->

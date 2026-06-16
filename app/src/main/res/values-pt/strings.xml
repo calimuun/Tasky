@@ -41,4 +41,8 @@
 	<string name="no_routines_setted">Nenhuma rotina configurada.</string>
 	<string name="no_completed_tasks">Nenhuma tarefa concluída.</string>
 	<string name="tap_plus_to_add">Toque no botão + para adicionar!</string>
+	<string name="notification_task_channel_description">Canal para receber notificações das tarefas</string>
+	<string name="onboard_permission_page_text">Tasky possui suporte a notificações.\nPara fazer as notificações funcionarem, você precisa permitir:</string>
+	<string name="alarms_permission">Alarmes e lembretes</string>
+	<string name="notifications_permission">Notificações</string>
 </resources>

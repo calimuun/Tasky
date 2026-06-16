@@ -28,9 +28,9 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:src="@drawable/app_icon_scaled"
-				android:background="@drawable/icon_background"
-				android:tint="?attr/colorOnSurfaceInverse"
-				android:layout_marginEnd="20dp" />
+				android:background="@drawable/round_icon_background"
+				android:layout_marginEnd="20dp"
+				app:tint="?attr/colorOnSurfaceInverse" />
 
 			<LinearLayout
 				android:layout_width="wrap_content"

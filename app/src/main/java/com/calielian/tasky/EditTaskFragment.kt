@@ -12,6 +12,7 @@ import com.calielian.tasky.database.RoutineEntity
 import com.calielian.tasky.database.TaskEntity
 import com.calielian.tasky.database.TaskRepository
 import com.calielian.tasky.databinding.FragmentEditTaskBinding
+import com.calielian.tasky.utils.AlarmScheduler
 import com.calielian.tasky.viewmodel.RoutineViewModel
 import com.calielian.tasky.viewmodel.RoutineViewModelFactory
 import com.calielian.tasky.viewmodel.TaskViewModel
@@ -192,6 +193,7 @@ class EditTaskFragment : Fragment() {
 		binding.deleteButton.setOnClickListener {
 			if (fragmentType == "task") {
 				taskViewModel.deleteTaskById(taskId!!)
+				AlarmScheduler.cancel(requireContext(), taskId!!)
 			} else {
 				routineViewModel.deleteRoutineById(taskId!!)
 			}
