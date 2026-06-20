@@ -13,8 +13,8 @@ import com.calielian.tasky.R
 
 class NotificationReceiver: BroadcastReceiver() {
 	override fun onReceive(context: Context, intent: Intent) {
-		val title = intent.getStringExtra("TITLE") ?: "Tarefa Pendente"
-		val description = intent.getStringExtra("DESC") ?: "Você tem uma tarefa agora!"
+		val title = intent.getStringExtra("TITLE")
+		val description = intent.getStringExtra("DESC")
 		val notificationId = intent.getIntExtra("ID", 0)
 
 		val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

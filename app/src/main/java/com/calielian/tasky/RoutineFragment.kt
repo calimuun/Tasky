@@ -16,6 +16,7 @@ import com.calielian.tasky.database.RoutineEntity
 import com.calielian.tasky.databinding.FragmentRoutineBinding
 import com.calielian.tasky.databinding.NewTaskLayoutBinding
 import com.calielian.tasky.recyclercomponents.RoutineAdapter
+import com.calielian.tasky.utils.AlarmScheduler
 import com.calielian.tasky.viewmodel.RoutineViewModel
 import com.calielian.tasky.viewmodel.RoutineViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -141,8 +142,10 @@ class RoutineFragment : Fragment() {
 
 		val adapter = RoutineAdapter().apply {
 			onCheckedChange = { routine ->
-				routine.checked = !routine.checked
-				viewModel.updateRoutineCheck(routine)
+				val routineUpdated = routine.copy(checked = !routine.checked, date = routine.date.plusDays(1))
+				viewModel.updateRoutineCheck(routineUpdated)
+				AlarmScheduler.cancelRoutine(requireContext(), routineUpdated.id)
+				AlarmScheduler.scheduleRoutine(requireContext(), routineUpdated)
 			}
 
 			onClick = { routine ->

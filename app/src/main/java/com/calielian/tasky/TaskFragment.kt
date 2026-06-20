@@ -165,7 +165,7 @@ class TaskFragment : Fragment() {
 							newTask.copy()
 						}
 
-						AlarmScheduler.schedule(requireContext(), taskToSchedule)
+						AlarmScheduler.scheduleTask(requireContext(), taskToSchedule)
 					}
 				}
 
@@ -178,7 +178,7 @@ class TaskFragment : Fragment() {
 		val adapter = TaskAdapter().apply {
 			onCheckedChange = { task ->
 				viewModel.completeTask(task)
-				AlarmScheduler.cancel(requireContext(), task.id)
+				AlarmScheduler.cancelTask(requireContext(), task.id)
 			}
 
 			onClick = { task ->

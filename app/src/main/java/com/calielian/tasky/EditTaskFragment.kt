@@ -193,9 +193,10 @@ class EditTaskFragment : Fragment() {
 		binding.deleteButton.setOnClickListener {
 			if (fragmentType == "task") {
 				taskViewModel.deleteTaskById(taskId!!)
-				AlarmScheduler.cancel(requireContext(), taskId!!)
+				AlarmScheduler.cancelTask(requireContext(), taskId!!)
 			} else {
 				routineViewModel.deleteRoutineById(taskId!!)
+				AlarmScheduler.cancelRoutine(requireContext(), taskId!!)
 			}
 
 			parentFragmentManager.popBackStack()
