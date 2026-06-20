@@ -5,10 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.calielian.tasky.database.TaskRepository
+import com.calielian.tasky.databinding.ChangeUsernameDialogLayoutBinding
 import com.calielian.tasky.databinding.FragmentMoreBinding
+import com.calielian.tasky.utils.AppDataStore
 import com.calielian.tasky.viewmodel.RoutineViewModel
 import com.calielian.tasky.viewmodel.RoutineViewModelFactory
 import com.calielian.tasky.viewmodel.TaskViewModel
@@ -16,6 +20,9 @@ import com.calielian.tasky.viewmodel.TaskViewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialSharedAxis
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import java.time.LocalTime
 
 class MoreFragment : Fragment() {
 	private var _binding: FragmentMoreBinding? = null
@@ -51,6 +58,7 @@ class MoreFragment : Fragment() {
 	@SuppressLint("SetTextI18n")
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		val dataStore = AppDataStore(requireContext())
 
 		binding.appVersion.text = getString(R.string.version) + BuildConfig.VERSION_NAME
 
@@ -60,6 +68,61 @@ class MoreFragment : Fragment() {
 				.replace(R.id.fragment_container, TaskCompletedFragment())
 				.addToBackStack(null)
 				.commit()
+		}
+
+		binding.changeUsername.setOnClickListener {
+			lifecycleScope.launch {
+				val dialogBinding = ChangeUsernameDialogLayoutBinding.inflate(layoutInflater)
+
+				val dialog = MaterialAlertDialogBuilder(requireContext())
+					.setView(dialogBinding.root)
+					.create()
+
+				dialogBinding.usernameInput.setText(dataStore.getUsername().first())
+
+				dialogBinding.usernameInput.doOnTextChanged { _, _, _, _ ->
+					if (dialogBinding.usernameInput.text.isNullOrEmpty()) {
+						dialogBinding.usernameInputLayout.error =
+							getString(R.string.required_input_error)
+						dialogBinding.changeButton.isEnabled = false
+					} else {
+						dialogBinding.usernameInputLayout.error = null
+						dialogBinding.changeButton.isEnabled = true
+					}
+				}
+
+				dialogBinding.changeButton.setOnClickListener {
+					if (dialogBinding.usernameInput.text.isNullOrEmpty()) {
+						dialogBinding.usernameInputLayout.error =
+							getString(R.string.required_input_error)
+						dialogBinding.changeButton.isEnabled = false
+						return@setOnClickListener
+					}
+
+					lifecycleScope.launch {
+						dataStore.setUsername(dialogBinding.usernameInput.text.toString())
+						(activity as MainActivity).changeUsernameFromGreeting(dialogBinding.usernameInput.text.toString())
+					}
+					dialog.dismiss()
+
+				}
+
+				dialogBinding.cancelButton.setOnClickListener {
+					dialog.dismiss()
+				}
+
+				dialog.show()
+			}
+		}
+
+		binding.changeNotificationTime.setOnClickListener {
+			lifecycleScope.launch {
+				Pickers.showTimePicker(this@MoreFragment, LocalTime.parse(dataStore.getDefaultAlarmTime().first())) { time ->
+					lifecycleScope.launch {
+						dataStore.setDefaultAlarmTime(time.toString())
+					}
+				}
+			}
 		}
 
 		binding.deleteTasks.setOnClickListener {

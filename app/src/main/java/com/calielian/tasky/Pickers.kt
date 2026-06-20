@@ -35,15 +35,15 @@ class Pickers {
 			datePicker.show(fragment.parentFragmentManager, "date_picker")
 		}
 
-		fun showTimePicker(fragment: Fragment, onTimeSelected: (LocalTime) -> Unit) {
+		fun showTimePicker(fragment: Fragment, defaultTime: LocalTime = LocalTime.now(), onTimeSelected: (LocalTime) -> Unit) {
 			val clockFormat = if (DateFormat.is24HourFormat(fragment.requireContext())) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
-			val now = LocalTime.now()
 
 			val timePicker = MaterialTimePicker.Builder()
 				.setTitleText(fragment.getString(R.string.time_picker_title))
 				.setTimeFormat(clockFormat)
-				.setHour(now.hour)
-				.setMinute(now.minute)
+				.setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
+				.setHour(defaultTime.hour)
+				.setMinute(defaultTime.minute)
 				.build()
 
 			timePicker.addOnPositiveButtonClickListener {

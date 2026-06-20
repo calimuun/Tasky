@@ -48,4 +48,7 @@
 	<string name="onboard_permission_page_text">Tasky has notification support.\nTo make notifications to work, you need to grant these permissions:</string>
 	<string name="alarms_permission">Alarms and reminders</string>
 	<string name="notifications_permission">Notifications</string>
+	<string name="change_username_option">Change your username</string>
+	<string name="change_default_notification_time_option">Change default notification time</string>
+	<string name="change">Change</string>
 </resources>

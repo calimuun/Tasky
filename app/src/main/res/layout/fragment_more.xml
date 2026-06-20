@@ -116,6 +116,84 @@
 			</LinearLayout>
 
 			<LinearLayout
+				android:id="@+id/change_username"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:minHeight="48dp"
+				android:padding="10dp"
+				android:gravity="center_vertical"
+				android:clickable="true"
+
+				android:background="?attr/selectableItemBackground">
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_person"
+					android:layout_marginEnd="10dp"
+
+					app:tint="?attr/colorOnSurface"/>
+
+				<TextView
+					style="?attr/textAppearanceBodyMedium"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/change_username_option" />
+
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1" />
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_chevron_right"
+
+					app:tint="?attr/colorOnSurface" />
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:id="@+id/change_notification_time"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:minHeight="48dp"
+				android:padding="10dp"
+				android:gravity="center_vertical"
+				android:clickable="true"
+
+				android:background="?attr/selectableItemBackground">
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_clock"
+					android:layout_marginEnd="10dp"
+
+					app:tint="?attr/colorOnSurface"/>
+
+				<TextView
+					style="?attr/textAppearanceBodyMedium"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/change_default_notification_time_option" />
+
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1" />
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_chevron_right"
+
+					app:tint="?attr/colorOnSurface" />
+
+			</LinearLayout>
+
+			<LinearLayout
 				android:id="@+id/delete_tasks"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"

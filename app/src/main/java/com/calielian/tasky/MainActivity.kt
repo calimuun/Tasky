@@ -69,6 +69,15 @@ class MainActivity : AppCompatActivity() {
 		binding.textHeader.text = greeting
 	}
 
+	fun changeUsernameFromGreeting(username: String) {
+		val commaIndex = greeting.indexOfFirst { it == ',' } + 1
+		greeting = greeting.substring(0, commaIndex)
+		greeting += " ${username.ifBlank { getString(R.string.user_placeholder) }}!"
+
+		greeting = greeting.replace(getString(R.string.user_placeholder), username)
+		binding.textHeader.text = greeting
+	}
+
 	private fun changeFragment(newFragment: Fragment) {
 		supportFragmentManager.beginTransaction()
 			.replace(R.id.fragment_container, newFragment)

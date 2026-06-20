@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import com.calielian.tasky.database.TaskEntity
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -12,6 +13,12 @@ object AlarmScheduler {
 
 	fun schedule(context: Context, task: TaskEntity) {
 		val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+			if (!alarmManager.canScheduleExactAlarms()) {
+				return
+			}
+		}
 
 		val intent = Intent(context, NotificationReceiver::class.java).apply {
 			putExtra("ID", task.id)
@@ -24,7 +31,6 @@ object AlarmScheduler {
 			PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
 		)
 
-		// Combina LocalDate + LocalTime para um instante (UTC)
 		val zonedDateTime = LocalDateTime.of(task.date, task.time)
 			.atZone(ZoneId.systemDefault())
 		val timeInMillis = zonedDateTime.toInstant().toEpochMilli()

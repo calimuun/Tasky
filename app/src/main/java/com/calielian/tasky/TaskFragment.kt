@@ -23,6 +23,7 @@ import com.calielian.tasky.viewmodel.TaskViewModel
 import com.calielian.tasky.viewmodel.TaskViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.transition.MaterialSharedAxis
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import nl.dionsegijn.konfetti.core.Party
 import nl.dionsegijn.konfetti.core.emitter.Emitter
@@ -149,20 +150,22 @@ class TaskFragment : Fragment() {
 				viewModel.insertTask(newTask)
 
 				if (newTaskDate != null || newTaskTime != null) {
-					val taskToSchedule = if (newTaskDate != null && newTaskTime == null) {
-						// todo: what if the default alarm time is in past?
-						newTask.copy(
-							time = LocalTime.parse(
-								dataStore.getDefaultAlarmTime().toString()
+					lifecycleScope.launch {
+						val taskToSchedule = if (newTaskDate != null && newTaskTime == null) {
+							// todo: what if the default alarm time is in past?
+							newTask.copy(
+								time = LocalTime.parse(
+									dataStore.getDefaultAlarmTime().first()
+								)
 							)
-						)
-					} else if (newTaskDate == null) {
-						newTask.copy(date = LocalDate.now())
-					} else {
-						newTask.copy()
-					}
+						} else if (newTaskDate == null) {
+							newTask.copy(date = LocalDate.now())
+						} else {
+							newTask.copy()
+						}
 
-					AlarmScheduler.schedule(requireContext(), taskToSchedule)
+						AlarmScheduler.schedule(requireContext(), taskToSchedule)
+					}
 				}
 
 				bottomSheet.dismiss()
