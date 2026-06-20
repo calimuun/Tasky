@@ -176,9 +176,13 @@ class RoutineFragment : Fragment() {
 				delay(100)
 
 				viewModel.allRoutines.collect { list ->
-					adapter.submitList(list)
+					val sortedList = list.sortedBy { routine ->
+						LocalDateTime.of(routine.date, routine.time)
+					}
 
-					if (list.isEmpty()) {
+					adapter.submitList(sortedList)
+
+					if (sortedList.isEmpty()) {
 						isNotEmpty = false
 						binding.emptyStateContainer.visibility = View.VISIBLE
 						binding.routineRecyclerview.visibility = View.GONE
@@ -188,7 +192,7 @@ class RoutineFragment : Fragment() {
 						binding.routineRecyclerview.visibility = View.VISIBLE
 					}
 
-					for (routine: RoutineEntity in list) {
+					for (routine: RoutineEntity in sortedList) {
 						if (!routine.checked) return@collect
 					}
 					if (isNotEmpty) {
