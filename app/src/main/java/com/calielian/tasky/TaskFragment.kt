@@ -206,9 +206,27 @@ class TaskFragment : Fragment() {
 		lifecycleScope.launch {
 			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 				viewModel.allTasks.collect { list ->
-					adapter.submitList(list)
+					val sortedList = list.sortedBy { task ->
+						if (task.date != null && task.time != null) {
+							LocalDateTime.of(task.date, task.time)
+						} else if (task.date != null) {
+							LocalDateTime.of(task.date, LocalTime.now())
+						}  else if (task.time != null) {
+							LocalDateTime.of(LocalDate.now(), task.time)
+						} else {
+							LocalDateTime.now()
+						}
+					}.sortedBy { task ->
+						if (task.date == null && task.time == null) {
+							task.title
+						} else {
+							""
+						}
+					}
 
-					if (list.isEmpty()) {
+					adapter.submitList(sortedList)
+
+					if (sortedList.isEmpty()) {
 						binding.emptyStateContainer.visibility = View.VISIBLE
 						binding.taskRecyclerview.visibility = View.GONE
 
