@@ -6,8 +6,11 @@ import com.calielian.tasky.database.RoutineEntity
 import com.calielian.tasky.database.TaskCompletedEntity
 import com.calielian.tasky.database.TaskEntity
 import com.calielian.tasky.databinding.TaskLayoutBinding
+import com.google.android.material.color.MaterialColors
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import com.google.android.material.R as MaterialR
 
 class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHolder(binding.root) {
 
@@ -45,6 +48,24 @@ class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHold
 
 		binding.root.setOnClickListener {
 			onClick(task)
+		}
+
+		if (task.date != null && task.time != null) {
+			val colorError = MaterialColors.getColor(
+				binding.root,
+				MaterialR.attr.colorErrorContainer
+			)
+
+			val colorNormal = MaterialColors.getColor(
+				binding.root,
+				MaterialR.attr.colorSurfaceContainer
+			)
+
+			if (LocalDateTime.of(task.date, task.time).isBefore(LocalDateTime.now())) {
+				binding.background.setCardBackgroundColor(colorError)
+			} else {
+				binding.background.setCardBackgroundColor(colorNormal)
+			}
 		}
  	}
 
