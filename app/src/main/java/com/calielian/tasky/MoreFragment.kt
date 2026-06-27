@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -41,6 +42,18 @@ class MoreFragment : Fragment() {
 		val factory = RoutineViewModelFactory(app.database.routineDao())
 
 		ViewModelProvider(this, factory)[RoutineViewModel::class.java]
+	}
+
+	private val exportDatabaseLauncher = registerForActivityResult(
+		ActivityResultContracts.CreateDocument("application/octet-stream")
+	) { uri ->
+		uri?.let { copyDatabaseToUri(it) }
+	}
+
+	private val importDatabaseLauncher = registerForActivityResult(
+		ActivityResultContracts.OpenDocument()
+	) { uri ->
+		uri?.let { importDatabaseFromUri(it) }
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -138,6 +151,27 @@ class MoreFragment : Fragment() {
 				getString(R.string.delete_all_routines_message)
 			) { routineViewModel.deleteAllRoutines() }
 		}
+
+		binding.exportData.setOnClickListener {
+			val app = requireActivity().application as App
+
+			if (app.database.isOpen) {
+				app.database.close()
+			}
+
+			val timestamp = System.currentTimeMillis()
+			exportDatabaseLauncher.launch("tasky_backup_$timestamp.db")
+		}
+
+		binding.importData.setOnClickListener {
+			val app = requireActivity().application as App
+
+			if (app.database.isOpen) {
+				app.database.close()
+			}
+
+			importDatabaseLauncher.launch(arrayOf("application/octet-stream"))
+		}
 	}
 
 	private fun showConfirmationDialog(title: String, message: String, onConfirm: () -> Unit) {
@@ -154,6 +188,47 @@ class MoreFragment : Fragment() {
 				).show()
 			}
 			.show()
+	}
+
+	private fun copyDatabaseToUri(uri: android.net.Uri) {
+		try {
+			val dbFile = requireContext().getDatabasePath("app_database")
+			val inputStream = dbFile.inputStream()
+			val outputStream = requireContext().contentResolver.openOutputStream(uri)
+
+			inputStream.use { input ->
+				outputStream?.use { output ->
+					input.copyTo(output)
+				}
+			}
+			Snackbar.make(binding.root, getString(R.string.export_completed), Snackbar.LENGTH_SHORT).show()
+		} catch (e: Exception) {
+			Snackbar.make(binding.root, getString(R.string.export_error), Snackbar.LENGTH_SHORT).show()
+		}
+	}
+
+	private fun importDatabaseFromUri(uri: android.net.Uri) {
+		try {
+			val dbFile = requireContext().getDatabasePath("app_database")
+			val inputStream = requireContext().contentResolver.openInputStream(uri)
+			val outputStream = dbFile.outputStream()
+
+			inputStream?.use { input ->
+				outputStream.use { output ->
+					input.copyTo(output)
+				}
+			}
+			Snackbar.make(binding.root, getString(R.string.restarting_after_import), Snackbar.LENGTH_LONG).show()
+			binding.root.postDelayed({
+				val intent = requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)
+				intent?.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP)
+				startActivity(intent!!)
+				Runtime.getRuntime().exit(0)
+			}, 2000)
+
+		} catch (e: Exception) {
+			Snackbar.make(binding.root, getString(R.string.import_error), Snackbar.LENGTH_SHORT).show()
+		}
 	}
 
 	override fun onDestroyView() {

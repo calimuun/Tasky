@@ -10,7 +10,8 @@ import com.calielian.tasky.database.AppDatabase
 import com.google.android.material.color.DynamicColors
 
 class App: Application() {
-	val database: AppDatabase by lazy { AppDatabase.getDatabase(this) }
+	val database: AppDatabase
+		get() = AppDatabase.getDatabase(this)
 
 	@OptIn(PredictiveBackControl::class)
 	override fun onCreate() {

@@ -48,4 +48,10 @@
 	<string name="change_username_option">Alterar seu nome de usuário</string>
 	<string name="change_default_notification_time_option">Alterar o horário padrão das notificações</string>
 	<string name="change">Alterar</string>
+	<string name="export_data">Exportar dados</string>
+	<string name="import_data">Importar dados</string>
+	<string name="import_error">Erro ao importar</string>
+	<string name="restarting_after_import">Importação concluída, reiniciando…</string>
+	<string name="export_completed">Arquivo exportado com sucesso</string>
+	<string name="export_error">Erro ao exportar</string>
 </resources>

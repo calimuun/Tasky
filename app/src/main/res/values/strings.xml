@@ -51,4 +51,10 @@
 	<string name="change_username_option">Change your username</string>
 	<string name="change_default_notification_time_option">Change default notification time</string>
 	<string name="change">Change</string>
+	<string name="export_data">Export data</string>
+	<string name="import_data">Import data</string>
+	<string name="import_error">Error while importing</string>
+	<string name="restarting_after_import">Importing completed, restarting…</string>
+	<string name="export_completed">File successfully exported</string>
+	<string name="export_error">Error while exporting</string>
 </resources>
