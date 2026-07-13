@@ -140,6 +140,10 @@ class TaskFragment : Fragment() {
 
 				val description = menuBinding.taskDescriptionInput.text.toString().trim()
 
+				if (newTaskTime != null && newTaskDate == null) {
+					newTaskDate = LocalDate.now()
+				}
+
 				val newTask = TaskEntity(
 					title = title,
 					description = description,

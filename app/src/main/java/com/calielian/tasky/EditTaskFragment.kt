@@ -165,6 +165,10 @@ class EditTaskFragment : Fragment() {
 			val description = binding.taskDescriptionInput.text.toString().trim().ifEmpty { null }
 
 			if (fragmentType == "task") {
+				if (taskTime != null && taskDate == null) {
+					taskDate = LocalDate.now()
+				}
+
 				val updatedTask = TaskEntity(
 					id = taskId!!,
 					title = title,
