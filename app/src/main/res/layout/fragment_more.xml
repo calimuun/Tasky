@@ -194,6 +194,47 @@
 			</LinearLayout>
 
 			<LinearLayout
+				android:id="@+id/receive_notifications"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:minHeight="48dp"
+				android:padding="10dp"
+				android:gravity="center_vertical"
+				android:clickable="true"
+				android:visibility="gone"
+				tools:visibility="visible"
+
+				android:background="?attr/selectableItemBackground">
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_notifications"
+					android:layout_marginEnd="10dp"
+
+					app:tint="?attr/colorOnSurface"/>
+
+				<TextView
+					style="?attr/textAppearanceBodyMedium"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/receive_notifications_option" />
+
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1" />
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:src="@drawable/ic_chevron_right"
+
+					app:tint="?attr/colorOnSurface" />
+
+			</LinearLayout>
+
+			<LinearLayout
 				android:id="@+id/export_data"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -216,7 +257,7 @@
 					style="?attr/textAppearanceBodyMedium"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:text="@string/export_data" />
+					android:text="@string/export_data_option" />
 
 			</LinearLayout>
 
@@ -243,7 +284,7 @@
 					style="?attr/textAppearanceBodyMedium"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:text="@string/import_data" />
+					android:text="@string/import_data_option" />
 
 			</LinearLayout>
 

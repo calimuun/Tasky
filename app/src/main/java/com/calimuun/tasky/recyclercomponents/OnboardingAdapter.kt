@@ -11,8 +11,8 @@ import com.calimuun.tasky.utils.OnboardPageItem
 class OnboardingAdapter(
 	private val items: List<OnboardPageItem>,
 	private val onOnboardingFinish: (String) -> Unit,
-	private val onRequestNotificationPermission: (OnboardScreenPermissionPageLayoutBinding) -> Unit,
-	private val onRequestAlarmPermission: (OnboardScreenPermissionPageLayoutBinding) -> Unit
+	private val onRequestNotificationPermission: () -> Unit,
+	private val onRequestAlarmPermission: () -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 	enum class PageType { NORMAL, PERMISSION , LAST }
@@ -77,16 +77,16 @@ class OnboardingAdapter(
 
 	class PermissionPageViewHolder(
 		private val binding: OnboardScreenPermissionPageLayoutBinding,
-		private val onRequestNotificationPermission: (OnboardScreenPermissionPageLayoutBinding) -> Unit,
-		private val onRequestAlarmPermission: (OnboardScreenPermissionPageLayoutBinding) -> Unit
+		private val onRequestNotificationPermission: () -> Unit,
+		private val onRequestAlarmPermission: () -> Unit
 	) : RecyclerView.ViewHolder(binding.root) {
 		fun bind() {
 			binding.notificationPermissionButton.setOnClickListener	{
-				onRequestNotificationPermission(binding)
+				onRequestNotificationPermission()
 			}
 
 			binding.alarmPermissionButton.setOnClickListener {
-				onRequestAlarmPermission(binding)
+				onRequestAlarmPermission()
 			}
 		}
 	}

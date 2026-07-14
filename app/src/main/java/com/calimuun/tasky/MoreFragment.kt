@@ -1,11 +1,21 @@
 package com.calimuun.tasky
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -28,6 +38,8 @@ import java.time.LocalTime
 class MoreFragment : Fragment() {
 	private var _binding: FragmentMoreBinding? = null
 	private val binding get() = _binding!!
+
+	private var requestAlarm: Boolean = false
 
 	val taskViewModel: TaskViewModel by lazy {
 		val app = requireActivity().application as App
@@ -56,6 +68,13 @@ class MoreFragment : Fragment() {
 		uri?.let { importDatabaseFromUri(it) }
 	}
 
+	private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+		if (isGranted) {
+			if (requestAlarm) requestAlarmPermission()
+			else binding.receiveNotifications.visibility = View.GONE
+		}
+	}
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
@@ -74,6 +93,12 @@ class MoreFragment : Fragment() {
 		val dataStore = AppDataStore(requireContext())
 
 		binding.appVersion.text = getString(R.string.version) + BuildConfig.VERSION_NAME
+
+		checkAlarmPermissionGranted()
+
+		if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED || requestAlarm) {
+			binding.receiveNotifications.visibility = View.VISIBLE
+		}
 
 		binding.seeCompletedTasks.setOnClickListener {
 			parentFragmentManager.beginTransaction()
@@ -172,6 +197,63 @@ class MoreFragment : Fragment() {
 
 			importDatabaseLauncher.launch(arrayOf("application/octet-stream"))
 		}
+
+		binding.receiveNotifications.setOnClickListener {
+			val hasNotificationPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+				ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+			} else {
+				true
+			}
+
+			checkAlarmPermissionGranted()
+
+			when {
+				!hasNotificationPermission -> {
+					if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.POST_NOTIFICATIONS)) {
+						showPermissionRequestExplanationDialog()
+					} else {
+						requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+					}
+				}
+
+				requestAlarm -> {
+					requestAlarmPermission()
+				}
+
+				else -> {
+					binding.receiveNotifications.visibility = View.GONE
+				}
+			}
+		}
+	}
+
+	private fun checkAlarmPermissionGranted() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+			val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+			requestAlarm = !alarmManager.canScheduleExactAlarms()
+		} else {
+			 requestAlarm = false
+		}
+	}
+
+	private fun showPermissionRequestExplanationDialog() {
+		AlertDialog.Builder(requireActivity())
+			.setTitle(getString(R.string.notifications_permission))
+			.setMessage(getString(R.string.notifications_permission_rationale))
+			.setPositiveButton(getString(R.string.notifications_permission_rationale_positive)) { _, _ ->
+				requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+			}
+			.setNegativeButton(getString(R.string.notifications_permission_rationale_negative)) { _, _ -> }
+			.show()
+	}
+
+	private fun requestAlarmPermission() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+			val intent = Intent().apply {
+				action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+			}
+			startActivity(intent)
+		}
 	}
 
 	private fun showConfirmationDialog(title: String, message: String, onConfirm: () -> Unit) {
@@ -221,7 +303,7 @@ class MoreFragment : Fragment() {
 			Snackbar.make(binding.root, getString(R.string.restarting_after_import), Snackbar.LENGTH_LONG).show()
 			binding.root.postDelayed({
 				val intent = requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)
-				intent?.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP)
+				intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 				startActivity(intent!!)
 				Runtime.getRuntime().exit(0)
 			}, 2000)

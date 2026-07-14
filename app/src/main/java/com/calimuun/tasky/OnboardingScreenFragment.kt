@@ -12,13 +12,13 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.calimuun.tasky.databinding.FragmentOnboardingScreenBinding
-import com.calimuun.tasky.databinding.OnboardScreenPermissionPageLayoutBinding
 import com.calimuun.tasky.recyclercomponents.OnboardingAdapter
 import com.calimuun.tasky.utils.AppDataStore
 import com.calimuun.tasky.utils.OnboardPageItem
@@ -32,13 +32,7 @@ class OnboardingScreenFragment : Fragment() {
 	private val binding get() = _binding!!
 	private lateinit var dataStore: AppDataStore
 
-	private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-		if (isGranted) {
-			viewLifecycleOwner.lifecycleScope.launch {
-				dataStore.setNotificationPermitted(true)
-			}
-		}
-	}
+	private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ ->	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 		_binding = FragmentOnboardingScreenBinding.inflate(inflater, container, false)
@@ -72,22 +66,16 @@ class OnboardingScreenFragment : Fragment() {
 			}
 		}
 
-		val onRequestNotificationPermission: (OnboardScreenPermissionPageLayoutBinding) -> Unit = { binding ->
-			val disableButton: (Int) -> Unit = { resourceId ->
-				binding.notificationPermissionButton.isClickable = false
-				binding.notificationPermissionButtonChevron.visibility = View.GONE
-				binding.notificationPermissionButtonIcon.setImageResource(resourceId)
-			}
-
+		val onRequestNotificationPermission: () -> Unit = {
 			when {
 				// permissão já consentida
 				ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED -> {
-					disableButton(R.drawable.ic_notifications)
+					Toast.makeText(requireContext(), getString(R.string.permission_already_granted), Toast.LENGTH_SHORT).show()
 				}
 
 				// permissão negada anteriormente, mostrar uma mensagem explicativa
 				ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.POST_NOTIFICATIONS) -> {
-					showPermissionRequestExplanationDialog(disableButton)
+					showPermissionRequestExplanationDialog()
 				}
 
 				// permissão ainda não consentida e solicitada
@@ -97,7 +85,7 @@ class OnboardingScreenFragment : Fragment() {
 			}
 		}
 
-		val onRequestAlarmPermission: (OnboardScreenPermissionPageLayoutBinding) -> Unit = { binding ->
+		val onRequestAlarmPermission: () -> Unit = {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 				val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
 				if (!alarmManager.canScheduleExactAlarms()) {
@@ -106,9 +94,7 @@ class OnboardingScreenFragment : Fragment() {
 					}
 					startActivity(intent)
 				} else {
-					binding.alarmPermissionButton.isClickable = false
-					binding.alarmPermissionButtonChevron.visibility = View.GONE
-					binding.alarmPermissionButtonIcon.setImageResource(R.drawable.ic_alarm_clock)
+					Toast.makeText(requireContext(), getString(R.string.permission_already_granted), Toast.LENGTH_SHORT).show()
 				}
 			}
 		}
@@ -129,19 +115,14 @@ class OnboardingScreenFragment : Fragment() {
 		)
 	}
 
-	private fun showPermissionRequestExplanationDialog(disableButton: (Int) -> Unit) {
+	private fun showPermissionRequestExplanationDialog() {
 		AlertDialog.Builder(requireActivity())
-			.setTitle("Permissão de Notificações")
-			.setMessage("Você precisa dar permissão para receber notificações.")
-			.setPositiveButton("Ta bom") { _, _ ->
+			.setTitle(getString(R.string.notifications_permission))
+			.setMessage(getString(R.string.notifications_permission_rationale))
+			.setPositiveButton(getString(R.string.notifications_permission_rationale_positive)) { _, _ ->
 				requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
 			}
-			.setNegativeButton("Nao") { _, _ ->
-				viewLifecycleOwner.lifecycleScope.launch {
-					dataStore.setNotificationPermitted(false)
-				}
-				disableButton(R.drawable.ic_notifications_off)
-			}
+			.setNegativeButton(getString(R.string.notifications_permission_rationale_negative)) { _, _ -> }
 			.show()
 	}
 
