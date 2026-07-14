@@ -59,4 +59,5 @@
 	<string name="notifications_permission_rationale_positive">Ativar notificações</string>
 	<string name="notifications_permission_rationale_negative">Desativar notificações</string>
 	<string name="receive_notifications_option">Receber notificações</string>
+	<string name="storage_permission_not_granted">As permissões necessárias não foram dadas.</string>
 </resources>

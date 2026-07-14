@@ -13,6 +13,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -72,6 +73,15 @@ class MoreFragment : Fragment() {
 		if (isGranted) {
 			if (requestAlarm) requestAlarmPermission()
 			else binding.receiveNotifications.visibility = View.GONE
+		}
+	}
+
+	private val storagePermissionLauncher = registerForActivityResult(
+		ActivityResultContracts.RequestMultiplePermissions()
+	) { permissions ->
+		val allGranted = permissions.all { it.value }
+		if (!allGranted) {
+			Toast.makeText(requireContext(), getString(R.string.storage_permission_not_granted), Toast.LENGTH_SHORT).show()
 		}
 	}
 
@@ -178,24 +188,39 @@ class MoreFragment : Fragment() {
 		}
 
 		binding.exportData.setOnClickListener {
-			val app = requireActivity().application as App
+			if (hasStoragePermission()) {
+				val app = requireActivity().application as App
 
-			if (app.database.isOpen) {
-				app.database.close()
+				if (app.database.isOpen) {
+					app.database.close()
+				}
+
+				val timestamp = System.currentTimeMillis()
+				exportDatabaseLauncher.launch("tasky_backup_$timestamp.db")
+			} else {
+				storagePermissionLauncher.launch(arrayOf(
+					Manifest.permission.READ_EXTERNAL_STORAGE,
+					Manifest.permission.WRITE_EXTERNAL_STORAGE
+				))
 			}
-
-			val timestamp = System.currentTimeMillis()
-			exportDatabaseLauncher.launch("tasky_backup_$timestamp.db")
 		}
 
 		binding.importData.setOnClickListener {
-			val app = requireActivity().application as App
+			if (hasStoragePermission()) {
 
-			if (app.database.isOpen) {
-				app.database.close()
+				val app = requireActivity().application as App
+
+				if (app.database.isOpen) {
+					app.database.close()
+				}
+
+				importDatabaseLauncher.launch(arrayOf("application/octet-stream"))
+			} else {
+				storagePermissionLauncher.launch(arrayOf(
+					Manifest.permission.READ_EXTERNAL_STORAGE,
+					Manifest.permission.WRITE_EXTERNAL_STORAGE
+				))
 			}
-
-			importDatabaseLauncher.launch(arrayOf("application/octet-stream"))
 		}
 
 		binding.receiveNotifications.setOnClickListener {
@@ -234,6 +259,15 @@ class MoreFragment : Fragment() {
 		} else {
 			 requestAlarm = false
 		}
+	}
+
+	private fun hasStoragePermission(): Boolean {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) return true
+
+		val readPermission = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+		val writePermission = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+		return readPermission == PackageManager.PERMISSION_GRANTED && writePermission == PackageManager.PERMISSION_GRANTED
 	}
 
 	private fun showPermissionRequestExplanationDialog() {
