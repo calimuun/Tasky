@@ -13,7 +13,6 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -57,31 +56,10 @@ class MoreFragment : Fragment() {
 		ViewModelProvider(this, factory)[RoutineViewModel::class.java]
 	}
 
-	private val exportDatabaseLauncher = registerForActivityResult(
-		ActivityResultContracts.CreateDocument("application/octet-stream")
-	) { uri ->
-		uri?.let { copyDatabaseToUri(it) }
-	}
-
-	private val importDatabaseLauncher = registerForActivityResult(
-		ActivityResultContracts.OpenDocument()
-	) { uri ->
-		uri?.let { importDatabaseFromUri(it) }
-	}
-
 	private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
 		if (isGranted) {
 			if (requestAlarm) requestAlarmPermission()
 			else binding.receiveNotifications.visibility = View.GONE
-		}
-	}
-
-	private val storagePermissionLauncher = registerForActivityResult(
-		ActivityResultContracts.RequestMultiplePermissions()
-	) { permissions ->
-		val allGranted = permissions.all { it.value }
-		if (!allGranted) {
-			Toast.makeText(requireContext(), getString(R.string.storage_permission_not_granted), Toast.LENGTH_SHORT).show()
 		}
 	}
 
@@ -187,42 +165,6 @@ class MoreFragment : Fragment() {
 			) { routineViewModel.deleteAllRoutines() }
 		}
 
-		binding.exportData.setOnClickListener {
-			if (hasStoragePermission()) {
-				val app = requireActivity().application as App
-
-				if (app.database.isOpen) {
-					app.database.close()
-				}
-
-				val timestamp = System.currentTimeMillis()
-				exportDatabaseLauncher.launch("tasky_backup_$timestamp.db")
-			} else {
-				storagePermissionLauncher.launch(arrayOf(
-					Manifest.permission.READ_EXTERNAL_STORAGE,
-					Manifest.permission.WRITE_EXTERNAL_STORAGE
-				))
-			}
-		}
-
-		binding.importData.setOnClickListener {
-			if (hasStoragePermission()) {
-
-				val app = requireActivity().application as App
-
-				if (app.database.isOpen) {
-					app.database.close()
-				}
-
-				importDatabaseLauncher.launch(arrayOf("application/octet-stream"))
-			} else {
-				storagePermissionLauncher.launch(arrayOf(
-					Manifest.permission.READ_EXTERNAL_STORAGE,
-					Manifest.permission.WRITE_EXTERNAL_STORAGE
-				))
-			}
-		}
-
 		binding.receiveNotifications.setOnClickListener {
 			val hasNotificationPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 				ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
@@ -261,15 +203,6 @@ class MoreFragment : Fragment() {
 		}
 	}
 
-	private fun hasStoragePermission(): Boolean {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) return true
-
-		val readPermission = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-		val writePermission = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
-		return readPermission == PackageManager.PERMISSION_GRANTED && writePermission == PackageManager.PERMISSION_GRANTED
-	}
-
 	private fun showPermissionRequestExplanationDialog() {
 		AlertDialog.Builder(requireActivity())
 			.setTitle(getString(R.string.notifications_permission))
@@ -304,47 +237,6 @@ class MoreFragment : Fragment() {
 				).show()
 			}
 			.show()
-	}
-
-	private fun copyDatabaseToUri(uri: android.net.Uri) {
-		try {
-			val dbFile = requireContext().getDatabasePath("app_database")
-			val inputStream = dbFile.inputStream()
-			val outputStream = requireContext().contentResolver.openOutputStream(uri)
-
-			inputStream.use { input ->
-				outputStream?.use { output ->
-					input.copyTo(output)
-				}
-			}
-			Snackbar.make(binding.root, getString(R.string.export_completed), Snackbar.LENGTH_SHORT).show()
-		} catch (e: Exception) {
-			Snackbar.make(binding.root, getString(R.string.export_error), Snackbar.LENGTH_SHORT).show()
-		}
-	}
-
-	private fun importDatabaseFromUri(uri: android.net.Uri) {
-		try {
-			val dbFile = requireContext().getDatabasePath("app_database")
-			val inputStream = requireContext().contentResolver.openInputStream(uri)
-			val outputStream = dbFile.outputStream()
-
-			inputStream?.use { input ->
-				outputStream.use { output ->
-					input.copyTo(output)
-				}
-			}
-			Snackbar.make(binding.root, getString(R.string.restarting_after_import), Snackbar.LENGTH_LONG).show()
-			binding.root.postDelayed({
-				val intent = requireContext().packageManager.getLaunchIntentForPackage(requireContext().packageName)
-				intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-				startActivity(intent!!)
-				Runtime.getRuntime().exit(0)
-			}, 2000)
-
-		} catch (e: Exception) {
-			Snackbar.make(binding.root, getString(R.string.import_error), Snackbar.LENGTH_SHORT).show()
-		}
 	}
 
 	override fun onDestroyView() {

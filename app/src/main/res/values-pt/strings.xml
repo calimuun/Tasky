@@ -48,16 +48,9 @@
 	<string name="change_username_option">Alterar seu nome de usuário</string>
 	<string name="change_default_notification_time_option">Alterar o horário padrão das notificações</string>
 	<string name="change">Alterar</string>
-	<string name="export_data_option">Exportar dados</string>
-	<string name="import_data_option">Importar dados</string>
-	<string name="import_error">Erro ao importar</string>
-	<string name="restarting_after_import">Importação concluída, reiniciando…</string>
-	<string name="export_completed">Arquivo exportado com sucesso</string>
-	<string name="export_error">Erro ao exportar</string>
 	<string name="permission_already_granted">Essa permissão já foi dada!</string>
 	<string name="notifications_permission_rationale">Sem essa permissão, você não pode receber lembretes sobre suas tarefas e rotinas!</string>
 	<string name="notifications_permission_rationale_positive">Ativar notificações</string>
 	<string name="notifications_permission_rationale_negative">Desativar notificações</string>
 	<string name="receive_notifications_option">Receber notificações</string>
-	<string name="storage_permission_not_granted">As permissões necessárias não foram dadas.</string>
 </resources>
