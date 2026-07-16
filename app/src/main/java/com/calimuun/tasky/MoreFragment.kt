@@ -24,6 +24,7 @@ import com.calimuun.tasky.database.TaskRepository
 import com.calimuun.tasky.databinding.ChangeUsernameDialogLayoutBinding
 import com.calimuun.tasky.databinding.FragmentMoreBinding
 import com.calimuun.tasky.utils.AppDataStore
+import com.calimuun.tasky.utils.Pickers
 import com.calimuun.tasky.viewmodel.RoutineViewModel
 import com.calimuun.tasky.viewmodel.RoutineViewModelFactory
 import com.calimuun.tasky.viewmodel.TaskViewModel
@@ -35,12 +36,20 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 
+/*
+* This defines the fragment "More" logic
+* Layout: fragment_more.xml
+* */
 class MoreFragment : Fragment() {
 	private var _binding: FragmentMoreBinding? = null
 	private val binding get() = _binding!!
 
 	private var requestAlarm: Boolean = false
 
+	// creates the ViewModel
+	// "by lazy" means that the ViewModel will be created only when it is needed (when the constant is called for the first time)
+	// by -> delegate the initialization for something
+	// lazy -> initialization method that is only called the first time the constant is called
 	val taskViewModel: TaskViewModel by lazy {
 		val app = requireActivity().application as App
 		val repository = TaskRepository(app.database, app.database.taskDao(), app.database.taskCompletedDao())
@@ -56,6 +65,7 @@ class MoreFragment : Fragment() {
 		ViewModelProvider(this, factory)[RoutineViewModel::class.java]
 	}
 
+	// launches the permission request and receives the result of the request
 	private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
 		if (isGranted) {
 			if (requestAlarm) requestAlarmPermission()
@@ -214,6 +224,7 @@ class MoreFragment : Fragment() {
 			.show()
 	}
 
+	// "Schedule Exact Alarm" it's not request by an overlay like other permissions, so we need to redirect the user to settings to manually allow
 	private fun requestAlarmPermission() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 			val intent = Intent().apply {

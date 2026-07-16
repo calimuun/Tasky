@@ -12,6 +12,11 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import com.google.android.material.R as MaterialR
 
+/*
+* This is a RecyclerView component named "Adapter"
+* An Adapter is responsible for providing data to the RecyclerView and creating views for the items
+* And after creating views for the items, the Adapter binds the data to the views via an ViewHolder
+* */
 class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHolder(binding.root) {
 
 	private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
@@ -38,6 +43,12 @@ class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHold
 
 		if (dateText.isNotBlank()) {
 			binding.itemDate.text = dateText
+		} else {
+			binding.itemDate.visibility = View.GONE
+		}
+
+		if (task.date != null || task.time != null) {
+			binding.itemDate.visibility = View.VISIBLE
 		} else {
 			binding.itemDate.visibility = View.GONE
 		}
@@ -78,6 +89,8 @@ class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHold
 			} else {
 				binding.background.setCardBackgroundColor(colorNormal)
 			}
+		} else {
+			binding.background.setCardBackgroundColor(colorNormal)
 		}
  	}
 

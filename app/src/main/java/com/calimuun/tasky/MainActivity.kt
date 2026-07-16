@@ -13,15 +13,21 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 
+/*
+* This defines the activity "Main" logic
+* Layout: activity_main.xml
+* */
 class MainActivity : AppCompatActivity() {
+	// lateinit var means that the variable will be initialized later
 	private lateinit var binding: ActivityMainBinding
 
+	// lateinit var means that the variable will be initialized later
 	lateinit var greeting: String
 
 	override fun onCreate(savedInstanceState: Bundle?) {
-		installSplashScreen()
+		installSplashScreen() // install the splash screen (aka make the custom splash screen works)
 		super.onCreate(savedInstanceState)
-		DynamicColors.applyToActivityIfAvailable(this)
+		DynamicColors.applyToActivityIfAvailable(this) // apply Material 3's Dynamic Colors to this activity
 		binding = ActivityMainBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 
@@ -34,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 			else getString(R.string.good_morning)
 
 		if (savedInstanceState == null) {
+			// the activity is being created for the first time, so check if it's the first time the user is using the app
 			lifecycleScope.launch {
 				val isFirstTime = dataStore.isFirstTime().first()
 

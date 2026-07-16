@@ -18,11 +18,19 @@ import com.calimuun.tasky.viewmodel.TaskCompletedViewModelFactory
 import com.google.android.material.transition.MaterialSharedAxis
 import kotlinx.coroutines.launch
 
+/*
+* This defines the fragment "Completed Tasks" logic
+* Layout: fragment_task_completed.xml
+* */
 class TaskCompletedFragment : Fragment() {
 
 	private var _binding: FragmentTaskCompletedBinding? = null
 	private val binding get() = _binding!!
 
+	// creates the ViewModel
+	// "by lazy" means that the ViewModel will be created only when it is needed (when the constant is called for the first time)
+	// by -> delegate the initialization for something
+	// lazy -> initialization method that is only called the first time the constant is called
 	private val viewModel: TaskCompletedViewModel by lazy {
 		val app = requireActivity().application as App
 		val repository = TaskRepository(app.database, app.database.taskDao(), app.database.taskCompletedDao())

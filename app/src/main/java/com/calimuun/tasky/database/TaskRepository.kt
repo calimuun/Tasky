@@ -2,6 +2,13 @@ package com.calimuun.tasky.database
 
 import androidx.room.withTransaction
 
+/*
+* This is a "repository"
+*
+* This connects two DAO's and performs operations on them
+*
+* This is necessary in Tasky's context because when you complete a task, you need to add it to the completed tasks table and remove from tasks table or vice versa
+* */
 class TaskRepository(
 	private val database: AppDatabase,
 	private val taskDao: TaskDao,

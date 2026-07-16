@@ -1,20 +1,23 @@
 package com.calimuun.tasky.database
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
+/*
+* This is a DAO (Data Access Object)
+*
+* Their function is to perform operations on the database
+*
+* As you can see, there is some annotations that define default operations (@Insert, @Update) or a @Query that defines a custom operations
+* */
 @Dao
 interface RoutineDao {
 	@Insert
 	suspend fun insert(routine: RoutineEntity)
-
-	@Delete
-	suspend fun delete(routine: RoutineEntity)
 
 	@Update
 	suspend fun update(routine: RoutineEntity)
@@ -33,10 +36,4 @@ interface RoutineDao {
 
 	@Query("UPDATE Routine SET date = :date, checked = :checked WHERE id = :id")
 	suspend fun updateRoutineCheck(id: Int, date: LocalDate, checked: Boolean)
-
-	@Query("UPDATE Routine SET description = :description WHERE id = :id")
-	suspend fun updateRoutineDescription(id: Int, description: String)
-
-	@Query("UPDATE Routine SET title = :title WHERE id = :id")
-	suspend fun updateRoutineTitle(id: Int, title: String)
 }

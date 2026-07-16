@@ -26,12 +26,18 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/*
+* This defines the fragment "Onboarding Screen" logic
+* Layout: fragment_onboarding_screen.xml
+* */
 class OnboardingScreenFragment : Fragment() {
 
 	private var _binding: FragmentOnboardingScreenBinding? = null
 	private val binding get() = _binding!!
+	// lateinit var means that the variable will be initialized later
 	private lateinit var dataStore: AppDataStore
 
+	// launches the permission request and receives the result of the request (in this case, does nothing with the result)
 	private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ ->	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -68,23 +74,24 @@ class OnboardingScreenFragment : Fragment() {
 
 		val onRequestNotificationPermission: () -> Unit = {
 			when {
-				// permissão já consentida
+				// the permission is already granted
 				ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED -> {
 					Toast.makeText(requireContext(), getString(R.string.permission_already_granted), Toast.LENGTH_SHORT).show()
 				}
 
-				// permissão negada anteriormente, mostrar uma mensagem explicativa
+				// the permission was previously denied, so show an explanation before asking again
 				ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.POST_NOTIFICATIONS) -> {
 					showPermissionRequestExplanationDialog()
 				}
 
-				// permissão ainda não consentida e solicitada
+				// the permission was never asked before, so ask for it
 				else -> {
 					requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
 				}
 			}
 		}
 
+		// "Schedule Exact Alarm" it's not request by an overlay like other permissions, so we need to redirect the user to settings to manually allow
 		val onRequestAlarmPermission: () -> Unit = {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 				val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager

@@ -19,6 +19,7 @@ import com.calimuun.tasky.databinding.NewTaskLayoutBinding
 import com.calimuun.tasky.recyclercomponents.TaskAdapter
 import com.calimuun.tasky.utils.AlarmScheduler
 import com.calimuun.tasky.utils.AppDataStore
+import com.calimuun.tasky.utils.Pickers
 import com.calimuun.tasky.viewmodel.TaskViewModel
 import com.calimuun.tasky.viewmodel.TaskViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -33,6 +34,10 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 
+/*
+* This defines the fragment "Tasks" logic
+* Layout: fragment_task.xml
+* */
 class TaskFragment : Fragment() {
 
 	private var _binding: FragmentTaskBinding? = null
@@ -42,8 +47,13 @@ class TaskFragment : Fragment() {
 	private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
 	var isEmptyAfterElement = false
+	// lateinit var means that the variable will be initialized later
 	lateinit var party: Party
 
+	// creates the ViewModel
+	// "by lazy" means that the ViewModel will be created only when it is needed (when the constant is called for the first time)
+	// by -> delegate the initialization for something
+	// lazy -> initialization method that is only called the first time the constant is called
 	private val viewModel: TaskViewModel by lazy {
 		val app = requireActivity().application as App
 		val repository = TaskRepository(app.database, app.database.taskDao(), app.database.taskCompletedDao())
@@ -210,6 +220,7 @@ class TaskFragment : Fragment() {
 		lifecycleScope.launch {
 			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 				viewModel.allTasks.collect { list ->
+					// sort by date and time, then by title
 					val sortedList = list.sortedBy { task ->
 						if (task.date != null && task.time != null) {
 							LocalDateTime.of(task.date, task.time)

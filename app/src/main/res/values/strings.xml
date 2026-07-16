@@ -36,12 +36,12 @@
 	<string name="delete_all_tasks_title">Delete all tasks?</string>
 	<string name="delete_all_routines_title">Delete all routines?</string>
 	<string name="delete_all_tasks_message">All pending and completed tasks will be deleted permanently!</string>
-	<string name="delete_all_routines_message">All setted routines will be deleted permanently!</string>
+	<string name="delete_all_routines_message">All set routines will be deleted permanently!</string>
 	<string name="cancel">Cancel</string>
 	<string name="delete">Delete</string>
 	<string name="deletion_completed">All data has been deleted successfully</string>
 	<string name="no_pending_tasks">No pending tasks.</string>
-	<string name="no_routines_setted">No routines setted.</string>
+	<string name="no_routines_set">No routines set.</string>
 	<string name="no_completed_tasks">No completed tasks.</string>
 	<string name="tap_plus_to_add">Tap the + button to add!</string>
 	<string name="notification_task_channel_description">Channel for receiving tasks notifications</string>
@@ -56,4 +56,7 @@
 	<string name="notifications_permission_rationale_positive">Enable notifications</string>
 	<string name="notifications_permission_rationale_negative">Disable notifications</string>
 	<string name="receive_notifications_option">Receive notifications</string>
+	<string name="content_desc_delete">Delete task or routine</string>
+	<string name="content_desc_add_task">Add a new task</string>
+	<string name="content_desc_add_routine">Set a new routine</string>
 </resources>

@@ -6,6 +6,9 @@ import androidx.room.PrimaryKey
 import java.time.LocalDate
 import java.time.LocalTime
 
+/*
+* This defines an entity (aka table) on the database
+* */
 @Entity(
 	tableName = "TaskCompleted"
 )

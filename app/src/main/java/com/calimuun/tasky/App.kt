@@ -9,6 +9,13 @@ import androidx.fragment.app.PredictiveBackControl
 import com.calimuun.tasky.database.AppDatabase
 import com.google.android.material.color.DynamicColors
 
+/*
+* An Application class is a class that represents the application as a whole
+* It is used here for storing an instance of the database,
+* initiate Material You (Material 3) integration,
+* enable the Predictive Back functionality
+* and create a notification channel
+* */
 class App: Application() {
 	val database: AppDatabase
 		get() = AppDatabase.getDatabase(this)

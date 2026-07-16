@@ -10,6 +10,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/*
+* This is a ViewModel
+* This will execute the DAO functions and has a flow list to observe the changes to the database
+* Also, it's attached to the lifecycle of the activity or fragment
+* */
 class TaskViewModel(
 	private val dao: TaskDao,
 	private val repository: TaskRepository
@@ -28,12 +33,6 @@ class TaskViewModel(
 		}
 	}
 
-	fun deleteTask(task: TaskEntity) {
-		viewModelScope.launch {
-			dao.delete(task)
-		}
-	}
-
 	fun deleteAllTasks() {
 		viewModelScope.launch {
 			repository.deleteAllTasks()
@@ -45,19 +44,6 @@ class TaskViewModel(
 			dao.deleteTask(id)
 		}
 	}
-
-	fun updateTitle(id: Int, title: String) {
-		viewModelScope.launch {
-			dao.updateTaskTitle(id, title)
-		}
-	}
-
-	fun updateDescription(id: Int, description: String) {
-		viewModelScope.launch {
-			dao.updateTaskDescription(id, description)
-		}
-	}
-
 
 	fun updateTask(task: TaskEntity) {
 		viewModelScope.launch {

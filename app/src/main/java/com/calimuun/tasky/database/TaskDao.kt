@@ -7,6 +7,13 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
+/*
+* This is a DAO (Data Access Object)
+*
+* Their function is to perform operations on the database
+*
+* As you can see, there is some annotations that define default operations (@Insert, @Delete, @Update) or a @Query that defines a custom operations
+* */
 @Dao
 interface TaskDao {
 	@Insert
@@ -29,10 +36,4 @@ interface TaskDao {
 
 	@Query("DELETE FROM Task")
 	suspend fun deleteAllTasks()
-
-	@Query("UPDATE Task SET description = :description WHERE id = :id")
-	suspend fun updateTaskDescription(id: Int, description: String)
-
-	@Query("UPDATE Task SET title = :title WHERE id = :id")
-	suspend fun updateTaskTitle(id: Int, title: String)
 }

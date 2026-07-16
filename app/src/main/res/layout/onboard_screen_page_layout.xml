@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -11,22 +13,24 @@
 		android:layout_width="250dp"
 		android:layout_height="250dp"
 		android:src="@drawable/ic_add"
-		/>
+		android:contentDescription="@null"
+		android:importantForAccessibility="no"/>
 
 	<TextView
 		style="?attr/textAppearanceDisplaySmallEmphasized"
+
 		android:id="@+id/title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="@string/placeholder"
-		/>
+
+		tools:text="@string/placeholder" />
 
 	<TextView
 		style="?attr/textAppearanceBody1"
+
 		android:id="@+id/description"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="@string/placeholder"
-		/>
+		android:text="@string/placeholder" />
 
 </LinearLayout>

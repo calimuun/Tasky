@@ -10,6 +10,11 @@ import kotlinx.coroutines.flow.map
 
 private val Context.dataStore by preferencesDataStore("settings")
 
+/*
+* This is a "DataStore" class
+* DataStore is a data storage method for not complex data (like simple app's configuration options)
+* This will be used for saving the username, default alarm time and if it's the first time the user is using the app
+* */
 class AppDataStore(val context: Context) {
 
 	private val dataStore = context.dataStore

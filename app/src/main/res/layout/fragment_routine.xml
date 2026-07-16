@@ -24,24 +24,29 @@
 		android:gravity="center"
 		android:orientation="vertical"
 		android:visibility="gone"
+
 		tools:visibility="visible">
 
 		<ImageView
 			android:layout_width="120dp"
 			android:layout_height="120dp"
 			android:src="@drawable/ic_all_things_completed"
+			android:contentDescription="@null"
+			android:importantForAccessibility="no"
+
 			app:tint="?attr/colorSurfaceVariant" />
 
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="16dp"
-			android:text="@string/no_routines_setted"
+			android:text="@string/no_routines_set"
 			android:textAppearance="?attr/textAppearanceTitleMedium"
 			android:textColor="?attr/colorOnSurfaceVariant" />
 
 		<TextView
 			style="?attr/textAppearanceBodyMedium"
+
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/tap_plus_to_add"
@@ -59,6 +64,7 @@
 		android:layout_height="wrap_content"
 		android:layout_gravity="bottom|end"
 		android:layout_margin="16dp"
+		android:contentDescription="@string/content_desc_add_routine"
 
 		app:srcCompat="@drawable/ic_add"
 		app:layout_behavior="com.google.android.material.behavior.HideViewOnScrollBehavior" />

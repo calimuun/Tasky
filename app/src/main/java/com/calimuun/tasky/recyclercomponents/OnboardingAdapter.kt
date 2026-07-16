@@ -8,6 +8,11 @@ import com.calimuun.tasky.databinding.OnboardScreenPageLayoutBinding
 import com.calimuun.tasky.databinding.OnboardScreenPermissionPageLayoutBinding
 import com.calimuun.tasky.utils.OnboardPageItem
 
+/*
+* This is a RecyclerView component named "Adapter"
+* An Adapter is responsible for providing data to the RecyclerView and creating views for the items
+* And after creating views for the items, the Adapter binds the data to the views via an ViewHolder
+* */
 class OnboardingAdapter(
 	private val items: List<OnboardPageItem>,
 	private val onOnboardingFinish: (String) -> Unit,

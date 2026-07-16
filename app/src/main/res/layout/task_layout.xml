@@ -2,6 +2,7 @@
 <com.google.android.material.card.MaterialCardView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 
 	android:id="@+id/background"
 	android:layout_width="match_parent"
@@ -25,34 +26,40 @@
 			android:layout_gravity="center_vertical" >
 			<TextView
 				style="?attr/textAppearanceBodyLarge"
+
 				android:id="@+id/item_name"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginBottom="2dp"
-				android:text="@string/placeholder"
 				android:lines="1"
 				android:ellipsize="end"
-				android:maxEms="13"/>
+				android:maxEms="13"
+
+				tools:text="@string/placeholder"/>
 
 			<TextView
 				style="?attr/textAppearanceBodySmall"
+
 				android:id="@+id/item_description"
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@string/placeholder"
+				android:layout_height="0dp"
 				android:layout_weight="1"
 				android:ellipsize="end"
 				android:maxEms="19"
 				android:lines="1"
 
+				tools:text="@string/placeholder"
+
 				android:layout_marginBottom="2dp"/>
 
 			<TextView
 				style="?attr/textAppearanceBodySmall"
+
 				android:id="@+id/item_date"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="@string/placeholder" />
+
+				tools:text="@string/placeholder" />
 		</LinearLayout>
 
 		<Space
@@ -64,8 +71,7 @@
 			android:id="@+id/radio_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			/>
+			android:layout_gravity="center" />
 
 	</LinearLayout>
 

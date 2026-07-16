@@ -13,6 +13,7 @@ import com.calimuun.tasky.database.TaskEntity
 import com.calimuun.tasky.database.TaskRepository
 import com.calimuun.tasky.databinding.FragmentEditTaskBinding
 import com.calimuun.tasky.utils.AlarmScheduler
+import com.calimuun.tasky.utils.Pickers
 import com.calimuun.tasky.viewmodel.RoutineViewModel
 import com.calimuun.tasky.viewmodel.RoutineViewModelFactory
 import com.calimuun.tasky.viewmodel.TaskViewModel
@@ -23,6 +24,12 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
+/*
+* This defines the fragment "Edit Task" logic
+* Layout: fragment_edit_task.xml
+*
+* "Routine" is a type of "recurrent task", so it is edited here too
+* */
 class EditTaskFragment : Fragment() {
 
 	private var fragmentType: String? = null
@@ -40,6 +47,10 @@ class EditTaskFragment : Fragment() {
 	private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM")
 	private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
+	// creates the ViewModel
+	// "by lazy" means that the ViewModel will be created only when it is needed (when the constant is called for the first time)
+	// by -> delegate the initialization for something
+	// lazy -> initialization method that is only called the first time the constant is called
 	val taskViewModel: TaskViewModel by lazy {
 		val app = requireActivity().application as App
 		val repository = TaskRepository(app.database, app.database.taskDao(), app.database.taskCompletedDao())
@@ -58,9 +69,11 @@ class EditTaskFragment : Fragment() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
+		// changes the transition. Predictive Back thing
 		enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
 		returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
 
+		// receives the arguments passed to the fragment
 		arguments?.let {
 			fragmentType = it.getString(ARG_FRAGMENT_TYPE)
 			taskId = it.getInt(ARG_ID)
@@ -225,6 +238,7 @@ class EditTaskFragment : Fragment() {
 		}
 	}
 
+	// defines what arguments can be passed to the fragment
 	companion object {
 		private const val ARG_FRAGMENT_TYPE = "fragment_type"
 		private const val ARG_ID = "id"

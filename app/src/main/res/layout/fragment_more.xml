@@ -30,6 +30,9 @@
 				android:src="@drawable/app_icon_scaled"
 				android:background="@drawable/round_icon_background"
 				android:layout_marginEnd="20dp"
+				android:contentDescription="@null"
+				android:importantForAccessibility="no"
+
 				app:tint="?attr/colorOnSurfaceInverse" />
 
 			<LinearLayout
@@ -38,6 +41,7 @@
 				android:orientation="vertical" >
 				<TextView
 					style="?attr/textAppearanceTitleLargeEmphasized"
+
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/app_name"
@@ -45,17 +49,20 @@
 
 				<TextView
 					style="?attr/textAppearanceBodyMedium"
+
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/app_description"
 					android:layout_marginBottom="1dp"/>
 
 				<TextView
-					android:id="@+id/app_version"
 					style="?attr/textAppearanceBodySmall"
+
+					android:id="@+id/app_version"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:text="@string/placeholder" />
+
+					tools:text="@string/placeholder" />
 			</LinearLayout>
 
 		</LinearLayout>
@@ -92,11 +99,14 @@
 					android:layout_height="wrap_content"
 					android:src="@drawable/ic_done"
 					android:layout_marginEnd="10dp"
+					android:contentDescription="@null"
+					android:importantForAccessibility="no"
 
 					app:tint="?attr/colorOnSurface"/>
 
 				<TextView
 					style="?attr/textAppearanceBodyMedium"
+
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/completed_tasks_option" />
@@ -110,6 +120,8 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:src="@drawable/ic_chevron_right"
+					android:contentDescription="@null"
+					android:importantForAccessibility="no"
 
 					app:tint="?attr/colorOnSurface" />
 
@@ -123,7 +135,6 @@
 				android:padding="10dp"
 				android:gravity="center_vertical"
 				android:clickable="true"
-
 				android:background="?attr/selectableItemBackground">
 
 				<ImageView
@@ -131,11 +142,14 @@
 					android:layout_height="wrap_content"
 					android:src="@drawable/ic_person"
 					android:layout_marginEnd="10dp"
+					android:contentDescription="@null"
+					android:importantForAccessibility="no"
 
 					app:tint="?attr/colorOnSurface"/>
 
 				<TextView
 					style="?attr/textAppearanceBodyMedium"
+
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/change_username_option" />
@@ -149,6 +163,8 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:src="@drawable/ic_chevron_right"
+					android:contentDescription="@null"
+					android:importantForAccessibility="no"
 
 					app:tint="?attr/colorOnSurface" />
 
@@ -162,7 +178,6 @@
 				android:padding="10dp"
 				android:gravity="center_vertical"
 				android:clickable="true"
-
 				android:background="?attr/selectableItemBackground">
 
 				<ImageView
@@ -170,11 +185,14 @@
 					android:layout_height="wrap_content"
 					android:src="@drawable/ic_clock"
 					android:layout_marginEnd="10dp"
+					android:contentDescription="@null"
+					android:importantForAccessibility="no"
 
 					app:tint="?attr/colorOnSurface"/>
 
 				<TextView
 					style="?attr/textAppearanceBodyMedium"
+
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/change_default_notification_time_option" />
@@ -188,6 +206,8 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:src="@drawable/ic_chevron_right"
+					android:contentDescription="@null"
+					android:importantForAccessibility="no"
 
 					app:tint="?attr/colorOnSurface" />
 
@@ -202,6 +222,7 @@
 				android:gravity="center_vertical"
 				android:clickable="true"
 				android:visibility="gone"
+
 				tools:visibility="visible"
 
 				android:background="?attr/selectableItemBackground">
@@ -211,11 +232,14 @@
 					android:layout_height="wrap_content"
 					android:src="@drawable/ic_notifications"
 					android:layout_marginEnd="10dp"
+					android:contentDescription="@null"
+					android:importantForAccessibility="no"
 
 					app:tint="?attr/colorOnSurface"/>
 
 				<TextView
 					style="?attr/textAppearanceBodyMedium"
+
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/receive_notifications_option" />
@@ -229,6 +253,8 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:src="@drawable/ic_chevron_right"
+					android:contentDescription="@null"
+					android:importantForAccessibility="no"
 
 					app:tint="?attr/colorOnSurface" />
 
@@ -249,11 +275,14 @@
 					android:layout_height="wrap_content"
 					android:src="@drawable/ic_delete_forever"
 					android:layout_marginEnd="10dp"
+					android:contentDescription="@null"
+					android:importantForAccessibility="no"
 
 					app:tint="?attr/colorOnSurface"/>
 
 				<TextView
 					style="?attr/textAppearanceBodyMedium"
+
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/delete_all_tasks_option"/>
@@ -276,11 +305,14 @@
 					android:layout_height="wrap_content"
 					android:src="@drawable/ic_delete_forever"
 					android:layout_marginEnd="10dp"
+					android:contentDescription="@null"
+					android:importantForAccessibility="no"
 
 					app:tint="?attr/colorOnSurface"/>
 
 				<TextView
 					style="?attr/textAppearanceBodyMedium"
+
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/delete_all_routines_option" />

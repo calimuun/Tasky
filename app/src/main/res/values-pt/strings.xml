@@ -38,7 +38,7 @@
 	<string name="delete">Apagar</string>
 	<string name="deletion_completed">Todos os dados foram apagados com sucesso</string>
 	<string name="no_pending_tasks">Nenhuma tarefa pendente.</string>
-	<string name="no_routines_setted">Nenhuma rotina configurada.</string>
+	<string name="no_routines_set">Nenhuma rotina configurada.</string>
 	<string name="no_completed_tasks">Nenhuma tarefa concluída.</string>
 	<string name="tap_plus_to_add">Toque no botão + para adicionar!</string>
 	<string name="notification_task_channel_description">Canal para receber notificações das tarefas</string>
@@ -53,4 +53,7 @@
 	<string name="notifications_permission_rationale_positive">Ativar notificações</string>
 	<string name="notifications_permission_rationale_negative">Desativar notificações</string>
 	<string name="receive_notifications_option">Receber notificações</string>
+	<string name="content_desc_delete">Apagar a tarefa ou rotina</string>
+	<string name="content_desc_add_task">Criar uma nova tarefa</string>
+	<string name="content_desc_add_routine">Definir uma nova rotina</string>
 </resources>

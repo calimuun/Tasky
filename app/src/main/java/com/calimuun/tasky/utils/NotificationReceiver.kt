@@ -11,6 +11,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.calimuun.tasky.R
 
+/*
+* This class receives the notifications from the AlarmScheduler and builds them to send to the user
+* */
 class NotificationReceiver: BroadcastReceiver() {
 	override fun onReceive(context: Context, intent: Intent) {
 		val title = intent.getStringExtra("TITLE")
@@ -20,6 +23,7 @@ class NotificationReceiver: BroadcastReceiver() {
 		val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 		val channelId = "tasky_notifications"
 
+		// if the user is on Android 13+, verifies if the app has notifications permission
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 			if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
 				return

@@ -7,6 +7,10 @@ import com.calimuun.tasky.database.TaskCompletedDao
 import com.calimuun.tasky.database.TaskDao
 import com.calimuun.tasky.database.TaskRepository
 
+/*
+* A ViewModelFactory has the function to create a ViewModel with arguments
+* Android doesn't support passing arguments to the ViewModel constructor natively
+* */
 class TaskViewModelFactory(
 	private val dao: TaskDao,
 	private val repository: TaskRepository

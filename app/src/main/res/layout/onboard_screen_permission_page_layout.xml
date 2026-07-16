@@ -2,6 +2,7 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -11,6 +12,7 @@
 
 	<TextView
 		style="?attr/textAppearanceBody1"
+
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/onboard_permission_page_text"
@@ -39,7 +41,6 @@
 				android:padding="10dp"
 				android:gravity="center_vertical"
 				android:clickable="true"
-
 				android:background="?attr/selectableItemBackground">
 
 				<ImageView
@@ -48,11 +49,14 @@
 					android:layout_height="wrap_content"
 					android:src="@drawable/ic_notifications"
 					android:layout_marginEnd="10dp"
+					android:contentDescription="@null"
+					android:importantForAccessibility="no"
 
 					app:tint="?attr/colorOnSurface"/>
 
 				<TextView
 					style="?attr/textAppearanceBodyMedium"
+
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/notifications_permission" />
@@ -67,6 +71,8 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:src="@drawable/ic_chevron_right"
+					android:contentDescription="@null"
+					android:importantForAccessibility="no"
 
 					app:tint="?attr/colorOnSurface" />
 
@@ -88,11 +94,14 @@
 					android:layout_height="wrap_content"
 					android:src="@drawable/ic_alarm_clock"
 					android:layout_marginEnd="10dp"
+					android:contentDescription="@null"
+					android:importantForAccessibility="no"
 
 					app:tint="?attr/colorOnSurface"/>
 
 				<TextView
 					style="?attr/textAppearanceBodyMedium"
+
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/alarms_permission"/>
@@ -107,6 +116,8 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:src="@drawable/ic_chevron_right"
+					android:contentDescription="@null"
+					android:importantForAccessibility="no"
 
 					app:tint="?attr/colorOnSurface" />
 

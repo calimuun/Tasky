@@ -9,6 +9,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/*
+* This is a ViewModel
+* This will execute the DAO functions and has a flow list to observe the changes to the database
+* Also, it's attached to the lifecycle of the activity or fragment
+* */
 class RoutineViewModel(private val dao: RoutineDao) : ViewModel() {
 	val allRoutines: StateFlow<List<RoutineEntity>> = dao.getAllRoutines()
 		.stateIn(
@@ -20,12 +25,6 @@ class RoutineViewModel(private val dao: RoutineDao) : ViewModel() {
 	fun insertRoutine(routine: RoutineEntity) {
 		viewModelScope.launch {
 			dao.insert(routine)
-		}
-	}
-
-	fun deleteRoutine(routine: RoutineEntity) {
-		viewModelScope.launch {
-			dao.delete(routine)
 		}
 	}
 
@@ -45,18 +44,6 @@ class RoutineViewModel(private val dao: RoutineDao) : ViewModel() {
 	fun deleteRoutineById(id: Int) {
 		viewModelScope.launch {
 			dao.deleteRoutine(id)
-		}
-	}
-
-	fun updateTitle(id: Int, title: String) {
-		viewModelScope.launch {
-			dao.updateRoutineTitle(id, title)
-		}
-	}
-
-	fun updateDescription(id: Int, description: String) {
-		viewModelScope.launch {
-			dao.updateRoutineDescription(id, description)
 		}
 	}
 

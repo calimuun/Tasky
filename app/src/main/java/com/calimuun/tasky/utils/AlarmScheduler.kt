@@ -11,6 +11,9 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
+/*
+* This object is responsible for scheduling notifications
+* */
 object AlarmScheduler {
 
 	private const val ACTION_TASK = "com.calimuun.tasky.TASK_NOTIFICATION"
@@ -19,6 +22,7 @@ object AlarmScheduler {
 	fun scheduleTask(context: Context, task: TaskEntity) {
 		val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
+		// if the user is on Android 12+, verifies if the app can schedule exact alarms (has alarms permission)
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 			if (!alarmManager.canScheduleExactAlarms()) {
 				return
@@ -43,7 +47,6 @@ object AlarmScheduler {
 
 		val timeInMillis = zonedDateTime.toInstant().toEpochMilli()
 
-		// Agendar
 		try {
 			alarmManager.setExactAndAllowWhileIdle(
 				AlarmManager.RTC_WAKEUP,
@@ -82,7 +85,6 @@ object AlarmScheduler {
 
 		val timeInMillis = zonedDateTime.toInstant().toEpochMilli()
 
-		// Agendar
 		try {
 			alarmManager.setExactAndAllowWhileIdle(
 				AlarmManager.RTC_WAKEUP,

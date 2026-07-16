@@ -17,6 +17,7 @@ import com.calimuun.tasky.databinding.FragmentRoutineBinding
 import com.calimuun.tasky.databinding.NewTaskLayoutBinding
 import com.calimuun.tasky.recyclercomponents.RoutineAdapter
 import com.calimuun.tasky.utils.AlarmScheduler
+import com.calimuun.tasky.utils.Pickers
 import com.calimuun.tasky.viewmodel.RoutineViewModel
 import com.calimuun.tasky.viewmodel.RoutineViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -30,6 +31,10 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 
+/*
+* This defines the fragment "Routines" logic
+* Layout: fragment_routine.xml
+* */
 class RoutineFragment : Fragment() {
 	private var _binding: FragmentRoutineBinding? = null
 	private val binding get() = _binding!!
@@ -38,8 +43,13 @@ class RoutineFragment : Fragment() {
 	private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
 	var isNotEmpty = false
+	// lateinit var means that the variable will be initialized later
 	lateinit var party: Party
 
+	// creates the ViewModel
+	// "by lazy" means that the ViewModel will be created only when it is needed (when the constant is called for the first time)
+	// by -> delegate the initialization for something
+	// lazy -> initialization method that is only called the first time the constant is called
 	private val viewModel: RoutineViewModel by lazy {
 		val app = requireActivity().application as App
 		val factory = RoutineViewModelFactory(app.database.routineDao())
