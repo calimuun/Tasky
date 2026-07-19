@@ -137,12 +137,16 @@ class RoutineFragment : Fragment() {
 
 				val description = menuBinding.taskDescriptionInput.text.toString().trim()
 
-				viewModel.insertRoutine(RoutineEntity(
+				val newRoutine = RoutineEntity(
 					title = title,
 					description = description,
 					date = newRoutineDate,
 					time = newRoutineTime
-				))
+				)
+
+				viewModel.insertRoutine(newRoutine)
+
+				AlarmScheduler.scheduleRoutine(requireContext(), newRoutine)
 
 				bottomSheet.dismiss()
 			}
