@@ -1,15 +1,19 @@
 package com.calimuun.tasky.utils
 
 import android.Manifest
-import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.calimuun.tasky.R
+import com.calimuun.tasky.database.AppDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /*
 * This class receives the notifications from the AlarmScheduler and builds them to send to the user
@@ -20,7 +24,6 @@ class NotificationReceiver: BroadcastReceiver() {
 		val description = intent.getStringExtra("DESC")
 		val notificationId = intent.getIntExtra("ID", 0)
 
-		val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 		val channelId = "tasky_notifications"
 
 		// if the user is on Android 13+, verifies if the app has notifications permission
@@ -31,13 +34,23 @@ class NotificationReceiver: BroadcastReceiver() {
 		}
 
 		val notification = NotificationCompat.Builder(context, channelId)
-			.setSmallIcon(R.drawable.ic_launcher_foreground)
+			.setSmallIcon(R.drawable.notification_icon)
 			.setContentTitle(title)
 			.setContentText(description)
 			.setPriority(NotificationCompat.PRIORITY_HIGH)
 			.setAutoCancel(true)
 			.build()
 
-		manager.notify(notificationId, notification)
+		NotificationManagerCompat.from(context).notify(notificationId, notification)
+
+		val pendingResult = goAsync()
+		CoroutineScope(Dispatchers.IO).launch {
+			try {
+				val db = AppDatabase.getDatabase(context)
+				AlarmScheduler.rescheduleNext(context, db)
+			} finally {
+				pendingResult.finish()
+			}
+		}
 	}
 }

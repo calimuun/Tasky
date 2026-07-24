@@ -34,13 +34,6 @@ class RoutineViewModel(private val dao: RoutineDao) : ViewModel() {
 			dao.resetId()
 		}
 	}
-
-	fun updateRoutineCheck(routine: RoutineEntity) {
-		viewModelScope.launch {
-			dao.updateRoutineCheck(routine.id, routine.date, routine.checked)
-		}
-	}
-
 	fun deleteRoutineById(id: Int) {
 		viewModelScope.launch {
 			dao.deleteRoutine(id)

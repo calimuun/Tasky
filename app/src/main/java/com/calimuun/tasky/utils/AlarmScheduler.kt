@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.calimuun.tasky.database.AppDatabase
 import com.calimuun.tasky.database.RoutineEntity
 import com.calimuun.tasky.database.TaskEntity
 import java.time.LocalDateTime
@@ -93,6 +94,34 @@ object AlarmScheduler {
 			)
 		} catch (e: SecurityException) {
 			e.printStackTrace()
+		}
+	}
+
+	fun rescheduleNext(context: Context, database: AppDatabase) {
+		val now = LocalDateTime.now()
+		val tasks = database.taskDao().getAllTasksSync()
+		val routines = database.routineDao().getAllRoutinesSync()
+
+		val nextTask = tasks
+			.filter { it.date != null && it.time != null } // get only tasks without date and/or time nulls
+			.map { it to LocalDateTime.of(it.date, it.time) } // create a pair of type Pair<TaskEntity, LocalDateTime>
+			.filter { it.second.isAfter(now) } // get only pairs that have a LocalDateTime after now
+			.minByOrNull { it.second } // get the pair with the smallest LocalDateTime
+
+		val nextRoutine = routines
+			.map { it to LocalDateTime.of(it.date, it.time) }
+			.filter { it.second.isAfter(now) }
+			.minByOrNull { it.second }
+
+		// verifies which notification should be scheduled next
+		when {
+			nextTask != null && (nextRoutine == null || nextTask.second.isBefore(nextRoutine.second)) -> {
+				scheduleTask(context, nextTask.first)
+			}
+
+			nextRoutine != null -> {
+				scheduleRoutine(context, nextRoutine.first)
+			}
 		}
 	}
 

@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDate
 
 /*
 * This is a DAO (Data Access Object)
@@ -16,6 +15,10 @@ import java.time.LocalDate
 * */
 @Dao
 interface RoutineDao {
+
+	@Query("SELECT * FROM Routine")
+	fun getAllRoutinesSync(): List<RoutineEntity>
+
 	@Insert
 	suspend fun insert(routine: RoutineEntity)
 
@@ -33,7 +36,4 @@ interface RoutineDao {
 
 	@Query("DELETE FROM Routine")
 	suspend fun deleteAllRoutines()
-
-	@Query("UPDATE Routine SET date = :date, checked = :checked WHERE id = :id")
-	suspend fun updateRoutineCheck(id: Int, date: LocalDate, checked: Boolean)
 }

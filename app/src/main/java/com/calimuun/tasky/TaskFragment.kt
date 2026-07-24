@@ -24,6 +24,7 @@ import com.calimuun.tasky.viewmodel.TaskViewModel
 import com.calimuun.tasky.viewmodel.TaskViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.transition.MaterialSharedAxis
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import nl.dionsegijn.konfetti.core.Party
@@ -46,7 +47,7 @@ class TaskFragment : Fragment() {
 	private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM")
 	private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
-	var isEmptyAfterElement = false
+	var isEmptyAfterCheck = false
 	// lateinit var means that the variable will be initialized later
 	lateinit var party: Party
 
@@ -150,40 +151,38 @@ class TaskFragment : Fragment() {
 
 				val description = menuBinding.taskDescriptionInput.text.toString().trim()
 
-				if (newTaskTime != null && newTaskDate == null) {
-					newTaskDate = LocalDate.now()
-				}
+				lifecycleScope.launch {
+					if (newTaskTime != null && newTaskDate == null) {
+						newTaskDate = LocalDate.now()
+					} else if(newTaskDate != null && newTaskTime == null) {
+						val defaultAlarmTime = LocalTime.parse(dataStore.getDefaultAlarmTime().first())
 
-				val newTask = TaskEntity(
-					title = title,
-					description = description,
-					date = newTaskDate,
-					time = newTaskTime
-				)
-
-				viewModel.insertTask(newTask)
-
-				if (newTaskDate != null || newTaskTime != null) {
-					lifecycleScope.launch {
-						val taskToSchedule = if (newTaskDate != null && newTaskTime == null) {
-							val defaultTime = dataStore.getDefaultAlarmTime().first()
-
-							if (LocalDateTime.now().isAfter(LocalDateTime.of(newTaskDate, LocalTime.parse(defaultTime)))) return@launch
-
-							newTask.copy(
-								time = LocalTime.parse(defaultTime)
-							)
-						} else if (newTaskDate == null) {
-							newTask.copy(date = LocalDate.now())
-						} else {
-							newTask.copy()
+						if (LocalDateTime.of(LocalDate.now(), defaultAlarmTime).isBefore(LocalDateTime.now())) {
+							Toast.makeText(requireContext(), getString(R.string.time_past_error), Toast.LENGTH_SHORT).show()
+							return@launch
 						}
 
-						AlarmScheduler.scheduleTask(requireContext(), taskToSchedule)
+						newTaskTime = defaultAlarmTime
 					}
-				}
 
-				bottomSheet.dismiss()
+					val newTask = TaskEntity(
+						title = title,
+						description = description,
+						date = newTaskDate,
+						time = newTaskTime
+					)
+
+					viewModel.insertTask(newTask)
+
+					if (newTaskDate != null) {
+						lifecycleScope.launch(Dispatchers.IO) {
+							val db = (requireActivity().application as App).database
+							AlarmScheduler.rescheduleNext(requireContext(), db)
+						}
+					}
+
+					bottomSheet.dismiss()
+				}
 			}
 
 			bottomSheet.show()
@@ -245,12 +244,12 @@ class TaskFragment : Fragment() {
 						binding.emptyStateContainer.visibility = View.VISIBLE
 						binding.taskRecyclerview.visibility = View.GONE
 
-						if (isEmptyAfterElement) {
+						if (isEmptyAfterCheck) {
 							binding.konfetti.start(party)
-							isEmptyAfterElement = false
+							isEmptyAfterCheck = false
 						}
 					} else {
-						isEmptyAfterElement = true
+						isEmptyAfterCheck = true
 						binding.emptyStateContainer.visibility = View.GONE
 						binding.taskRecyclerview.visibility = View.VISIBLE
 					}

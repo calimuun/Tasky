@@ -21,7 +21,7 @@ import com.calimuun.tasky.utils.Pickers
 import com.calimuun.tasky.viewmodel.RoutineViewModel
 import com.calimuun.tasky.viewmodel.RoutineViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import nl.dionsegijn.konfetti.core.Party
 import nl.dionsegijn.konfetti.core.emitter.Emitter
@@ -146,7 +146,10 @@ class RoutineFragment : Fragment() {
 
 				viewModel.insertRoutine(newRoutine)
 
-				AlarmScheduler.scheduleRoutine(requireContext(), newRoutine)
+				lifecycleScope.launch(Dispatchers.IO) {
+					val db = (requireActivity().application as App).database
+					AlarmScheduler.rescheduleNext(requireContext(), db)
+				}
 
 				bottomSheet.dismiss()
 			}
@@ -156,10 +159,9 @@ class RoutineFragment : Fragment() {
 
 		val adapter = RoutineAdapter().apply {
 			onCheckedChange = { routine ->
-				val routineUpdated = routine.copy(checked = !routine.checked, date = routine.date.plusDays(1))
-				viewModel.updateRoutineCheck(routineUpdated)
+				val routineUpdated = routine.copy(date = LocalDate.now().plusDays(1))
+				viewModel.updateRoutine(routineUpdated)
 				AlarmScheduler.cancelRoutine(requireContext(), routineUpdated.id)
-				AlarmScheduler.scheduleRoutine(requireContext(), routineUpdated)
 			}
 
 			onClick = { routine ->
@@ -186,15 +188,14 @@ class RoutineFragment : Fragment() {
 
 		lifecycleScope.launch {
 			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-				delay(100)
-
 				viewModel.allRoutines.collect { list ->
 					val sortedList = list.sortedBy { routine ->
 						LocalDateTime.of(routine.date, routine.time)
 					}
 
 					adapter.submitList(sortedList)
+
+					var routineWithDateBeforeOrEqualNow: RoutineEntity? = null
 
 					if (sortedList.isEmpty()) {
 						isNotEmpty = false
@@ -204,12 +205,11 @@ class RoutineFragment : Fragment() {
 						isNotEmpty = true
 						binding.emptyStateContainer.visibility = View.GONE
 						binding.routineRecyclerview.visibility = View.VISIBLE
+						val now = LocalDate.now()
+						routineWithDateBeforeOrEqualNow = sortedList.firstOrNull { it.date.isBefore(now) || it.date.isEqual(now) }
 					}
 
-					for (routine: RoutineEntity in sortedList) {
-						if (!routine.checked) return@collect
-					}
-					if (isNotEmpty) {
+					if (isNotEmpty && routineWithDateBeforeOrEqualNow == null) {
 						binding.konfetti.start(party)
 					}
 				}

@@ -71,20 +71,8 @@ class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHold
 			MaterialR.attr.colorSurfaceContainer
 		)
 
-		if (task.date != null && task.time != null) {
+		if (task.date != null) {
 			if (LocalDateTime.of(task.date, task.time).isBefore(LocalDateTime.now())) {
-				binding.background.setCardBackgroundColor(colorError)
-			} else {
-				binding.background.setCardBackgroundColor(colorNormal)
-			}
-		} else if (task.date != null) {
-			if (task.date.isBefore(LocalDate.now())) {
-				binding.background.setCardBackgroundColor(colorError)
-			} else {
-				binding.background.setCardBackgroundColor(colorNormal)
-			}
-		} else if (task.time != null) {
-			if (task.time.isBefore(LocalDateTime.now().toLocalTime())) {
 				binding.background.setCardBackgroundColor(colorError)
 			} else {
 				binding.background.setCardBackgroundColor(colorNormal)
@@ -116,12 +104,11 @@ class ViewHolders(private val binding: TaskLayoutBinding): RecyclerView.ViewHold
 
 		binding.radioButton.setOnCheckedChangeListener(null)
 
-		binding.radioButton.isChecked = routine.checked
-
-		binding.radioButton.isEnabled = isNow
+		binding.radioButton.isEnabled = isNow || routine.date.isBefore(now)
 
 		binding.radioButton.setOnCheckedChangeListener { _, isChecked ->
 			if (isChecked && isNow) {
+				binding.radioButton.isChecked = false
 				onCheckedChange(routine)
 			}
 		}

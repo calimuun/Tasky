@@ -17,6 +17,5 @@ data class RoutineEntity(
 	@ColumnInfo(name = "title") val title: String,
 	@ColumnInfo(name = "description") val description: String?,
 	@ColumnInfo(name = "date") val date: LocalDate,
-	@ColumnInfo(name = "time") val time: LocalTime,
-	@ColumnInfo(name = "checked") var checked: Boolean = false
+	@ColumnInfo(name = "time") val time: LocalTime
 )

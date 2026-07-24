@@ -16,6 +16,10 @@ import kotlinx.coroutines.flow.Flow
 * */
 @Dao
 interface TaskDao {
+
+	@Query("SELECT * FROM Task")
+	fun getAllTasksSync(): List<TaskEntity>
+
 	@Insert
 	suspend fun insert(task: TaskEntity)
 

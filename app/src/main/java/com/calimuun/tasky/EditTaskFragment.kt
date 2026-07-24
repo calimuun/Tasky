@@ -8,17 +8,22 @@ import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.calimuun.tasky.database.RoutineEntity
 import com.calimuun.tasky.database.TaskEntity
 import com.calimuun.tasky.database.TaskRepository
 import com.calimuun.tasky.databinding.FragmentEditTaskBinding
 import com.calimuun.tasky.utils.AlarmScheduler
+import com.calimuun.tasky.utils.AppDataStore
 import com.calimuun.tasky.utils.Pickers
 import com.calimuun.tasky.viewmodel.RoutineViewModel
 import com.calimuun.tasky.viewmodel.RoutineViewModelFactory
 import com.calimuun.tasky.viewmodel.TaskViewModel
 import com.calimuun.tasky.viewmodel.TaskViewModelFactory
 import com.google.android.material.transition.MaterialSharedAxis
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -33,13 +38,11 @@ import java.time.format.DateTimeFormatter
 class EditTaskFragment : Fragment() {
 
 	private var fragmentType: String? = null
-	private var taskId: Int? = null
-	private var taskTitle: String? = null
-	private var taskDescription: String? = null
-	private var taskDate: LocalDate? = null
-	private var taskTime: LocalTime? = null
-
-	private var routineChecked = false
+	private var itemId: Int? = null
+	private var title: String? = null
+	private var description: String? = null
+	private var date: LocalDate? = null
+	private var time: LocalTime? = null
 
 	private var _binding: FragmentEditTaskBinding? = null
 	private val binding get() = _binding!!
@@ -76,23 +79,19 @@ class EditTaskFragment : Fragment() {
 		// receives the arguments passed to the fragment
 		arguments?.let {
 			fragmentType = it.getString(ARG_FRAGMENT_TYPE)
-			taskId = it.getInt(ARG_ID)
-			taskTitle = it.getString(ARG_TITLE)
+			itemId = it.getInt(ARG_ID)
+			title = it.getString(ARG_TITLE)
 
-			it.getString(ARG_DESCRIPTION)?.let { description ->
-				taskDescription = description
+			it.getString(ARG_DESCRIPTION)?.let { itemDescription ->
+				description = itemDescription
 			}
 
-			it.getString(ARG_DATE)?.let { date ->
-				taskDate = LocalDate.parse(date)
+			it.getString(ARG_DATE)?.let { itemDate ->
+				date = LocalDate.parse(itemDate)
 			}
 
-			it.getString(ARG_TIME)?.let { date ->
-				taskTime = LocalTime.parse(date)
-			}
-
-			if (fragmentType == "routine") {
-				routineChecked = it.getBoolean(ARG_CHECKED)
+			it.getString(ARG_TIME)?.let { itemTime ->
+				time = LocalTime.parse(itemTime)
 			}
 		}
 	}
@@ -107,18 +106,20 @@ class EditTaskFragment : Fragment() {
 
 		changeItemsToMatchFragmentType()
 
-		binding.taskTitleInput.setText(taskTitle)
+		val dataStore = AppDataStore(requireContext())
 
-		taskDescription?.let {
+		binding.taskTitleInput.setText(title)
+
+		description?.let {
 			binding.taskDescriptionInput.setText(it)
 		}
 
-		taskDate?.let {
+		date?.let {
 			binding.dateChip.text = it.format(dateFormatter)
 			binding.dateChip.visibility = View.VISIBLE
 		}
 
-		taskTime?.let {
+		time?.let {
 			binding.timeChip.text = it.format(timeFormatter)
 			binding.timeChip.visibility = View.VISIBLE
 		}
@@ -128,22 +129,22 @@ class EditTaskFragment : Fragment() {
 		}
 
 		binding.dateButton.setOnClickListener {
-			Pickers.showDatePicker(this) { date ->
-				binding.dateChip.text = date.format(dateFormatter)
+			Pickers.showDatePicker(this) { datePicked ->
+				binding.dateChip.text = datePicked.format(dateFormatter)
 				binding.dateChip.visibility = View.VISIBLE
-				taskDate = date
+				date = datePicked
 			}
 		}
 
 		binding.timeButton.setOnClickListener {
-			Pickers.showTimePicker(this) { time ->
+			Pickers.showTimePicker(this) { timePicked ->
 				val now = LocalDateTime.now()
-				val selectedDateTime = LocalDateTime.of(taskDate ?: LocalDate.now(), time)
+				val selectedDateTime = LocalDateTime.of(date ?: LocalDate.now(), timePicked)
 
 				if (selectedDateTime.isAfter(now)) {
-					binding.timeChip.text = time.format(timeFormatter)
+					binding.timeChip.text = timePicked.format(timeFormatter)
 					binding.timeChip.visibility = View.VISIBLE
-					taskTime = time
+					time = timePicked
 				} else {
 					Toast.makeText(requireContext(), getString(R.string.time_past_error), Toast.LENGTH_SHORT).show()
 				}
@@ -153,12 +154,12 @@ class EditTaskFragment : Fragment() {
 		if (fragmentType == "task") {
 			binding.dateChip.setOnCloseIconClickListener {
 				binding.dateChip.visibility = View.GONE
-				taskDate = null
+				date = null
 			}
 
 			binding.timeChip.setOnCloseIconClickListener {
 				binding.timeChip.visibility = View.GONE
-				taskTime = null
+				time = null
 			}
 
 		}
@@ -177,44 +178,64 @@ class EditTaskFragment : Fragment() {
 			val title = binding.taskTitleInput.text.toString().trim()
 			val description = binding.taskDescriptionInput.text.toString().trim().ifEmpty { null }
 
-			if (fragmentType == "task") {
-				if (taskTime != null && taskDate == null) {
-					taskDate = LocalDate.now()
+			lifecycleScope.launch {
+				if (fragmentType == "task") {
+					if (time != null && date == null) {
+						date = LocalDate.now()
+					} else if(date != null && time == null) {
+						val defaultAlarmTime = LocalTime.parse(dataStore.getDefaultAlarmTime().first())
+
+						if (LocalDateTime.of(LocalDate.now(), defaultAlarmTime).isBefore(LocalDateTime.now())) {
+							Toast.makeText(requireContext(), getString(R.string.time_past_error), Toast.LENGTH_SHORT).show()
+							return@launch
+						}
+
+						time = defaultAlarmTime
+					}
+
+					val updatedTask = TaskEntity(
+						id = itemId!!,
+						title = title,
+						description = description,
+						date = date,
+						time = time
+					)
+
+					taskViewModel.updateTask(updatedTask)
+					AlarmScheduler.cancelTask(requireContext(), updatedTask.id)
+				} else {
+					val updatedRoutine = RoutineEntity(
+						id = itemId!!,
+						title = title,
+						description = description,
+						date = date!!,
+						time = time!!,
+					)
+
+					routineViewModel.updateRoutine(updatedRoutine)
+					AlarmScheduler.cancelRoutine(requireContext(), updatedRoutine.id)
 				}
 
-				val updatedTask = TaskEntity(
-					id = taskId!!,
-					title = title,
-					description = description,
-					date = taskDate,
-					time = taskTime
-				)
+				lifecycleScope.launch(Dispatchers.IO) {
+					val db = (requireActivity().application as App).database
+					AlarmScheduler.rescheduleNext(requireContext(), db)
+				}
 
-				taskViewModel.updateTask(updatedTask)
-			} else {
-				val updatedRoutine = RoutineEntity(
-					id = taskId!!,
-					title = title,
-					description = description,
-					date = taskDate!!,
-					time = taskTime!!,
-					routineChecked
-				)
-
-				routineViewModel.updateRoutine(updatedRoutine)
+				parentFragmentManager.popBackStack()
 			}
-
-			parentFragmentManager.popBackStack()
 		}
 
 		binding.deleteButton.setOnClickListener {
 			if (fragmentType == "task") {
-				taskViewModel.deleteTaskById(taskId!!)
-				AlarmScheduler.cancelTask(requireContext(), taskId!!)
+				taskViewModel.deleteTaskById(itemId!!)
+				AlarmScheduler.cancelTask(requireContext(), itemId!!)
 			} else {
-				routineViewModel.deleteRoutineById(taskId!!)
-				AlarmScheduler.cancelRoutine(requireContext(), taskId!!)
+				routineViewModel.deleteRoutineById(itemId!!)
+				AlarmScheduler.cancelRoutine(requireContext(), itemId!!)
 			}
+
+			val db = (requireActivity().application as App).database
+			AlarmScheduler.rescheduleNext(requireContext(), db)
 
 			parentFragmentManager.popBackStack()
 		}
@@ -233,8 +254,8 @@ class EditTaskFragment : Fragment() {
 			binding.dateChip.closeIcon = null
 			binding.timeChip.closeIcon = null
 
-			if (taskDate == null) taskDate = LocalDate.now()
-			if (taskTime == null) taskTime = LocalTime.now()
+			if (date == null) date = LocalDate.now()
+			if (time == null) time = LocalTime.now()
 		}
 	}
 
@@ -246,19 +267,17 @@ class EditTaskFragment : Fragment() {
 		private const val ARG_DESCRIPTION = "description"
 		private const val ARG_DATE = "date"
 		private const val ARG_TIME = "time"
-		private const val ARG_CHECKED = "checked"
 
 		@JvmStatic
-		fun newInstance(fragmentType: String, id: Int, taskTitle: String, taskDescription: String?, taskDate: String?, taskTime: String?, checked: Boolean = false) =
+		fun newInstance(fragmentType: String, id: Int, title: String, description: String?, date: String?, time: String?) =
 			EditTaskFragment().apply {
 				arguments = Bundle().apply {
 					putString(ARG_FRAGMENT_TYPE, fragmentType)
 					putInt(ARG_ID, id)
-					putString(ARG_TITLE, taskTitle)
-					putString(ARG_DESCRIPTION, taskDescription)
-					putString(ARG_DATE, taskDate)
-					putString(ARG_TIME, taskTime)
-					putBoolean(ARG_CHECKED, checked)
+					putString(ARG_TITLE, title)
+					putString(ARG_DESCRIPTION, description)
+					putString(ARG_DATE, date)
+					putString(ARG_TIME, time)
 				}
 			}
 	}
