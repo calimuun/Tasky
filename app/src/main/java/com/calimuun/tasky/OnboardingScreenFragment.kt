@@ -114,9 +114,9 @@ class OnboardingScreenFragment : Fragment() {
 
 	private fun getOnboardPages(): List<OnboardPageItem> {
 		return listOf(
-			OnboardPageItem("Teste 1", "Teste 1 desc", R.drawable.app_icon_scaled),
-			OnboardPageItem("Teste 2", "Teste 2 desc", R.drawable.ic_done),
-			OnboardPageItem("Teste 3", "Teste 3 desc", R.drawable.ic_routine),
+			OnboardPageItem(getString(R.string.app_name), getString(R.string.onboard_1_description), R.drawable.app_icon_scaled),
+			OnboardPageItem(getString(R.string.onboard_2_title), getString(R.string.onboard_2_description), R.drawable.ic_task),
+			OnboardPageItem(getString(R.string.onboard_3_title), getString(R.string.onboard_3_description), R.drawable.ic_routine),
 			OnboardPageItem("Permission", "", 0),
 			OnboardPageItem("", "", 0)
 		)
