@@ -1,4 +1,4 @@
-<p align="center"><img src="repo_images/app_icon.png" width="100" style="border-radius: 50%;"></p>
+<p align="center"><img alt="logo" src="repo_images/app_icon.png" width="100"></p>
 <h1 align="center">Tasky, a task and routine manager</h1>
 
 <p align="center">
@@ -13,9 +13,9 @@
 
 <h1>Screenshots</h1>
 <p align="center">
-    <img src="repo_images/ss_1.png" height="512">
-    <img src="repo_images/ss_2.png" height="512">
-    <img src="repo_images/ss_3.png" height="512">
+    <img alt="Screenshot 1" src="repo_images/ss_1.png" height="512">
+    <img alt="Screenshot 2" src="repo_images/ss_2.png" height="512">
+    <img alt="Screenshot 3" src="repo_images/ss_3.png" height="512">
 </p>
 
 <h1>Custom libs used on Tasky</h1>
