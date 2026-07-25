@@ -6,6 +6,7 @@
 </p>
 
 <h1>Characteristics</h1>
+
 - Material 3 (Material You) design
 - Supports routines (recurrent tasks)
 - Notification support for tasks or routines
@@ -16,3 +17,7 @@
     <img src="repo_images/ss_2.png" height="512">
     <img src="repo_images/ss_3.png" height="512">
 </p>
+
+<h1>Custom libs used on Tasky</h1>
+
+- [Konfetti](https://github.com/DanielMartinus/Konfetti)
