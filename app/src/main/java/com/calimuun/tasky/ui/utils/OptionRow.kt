@@ -1,4 +1,4 @@
-package com.calimuun.tasky.ui
+package com.calimuun.tasky.ui.utils
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row

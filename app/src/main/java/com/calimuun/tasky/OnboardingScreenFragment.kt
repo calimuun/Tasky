@@ -20,24 +20,16 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.calimuun.tasky.databinding.FragmentOnboardingScreenBinding
-import com.calimuun.tasky.recyclercomponents.OnboardingAdapter
 import com.calimuun.tasky.ui.OnboardingScreen
 import com.calimuun.tasky.utils.AppDataStore
-import com.calimuun.tasky.utils.OnboardPageItem
-import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /*
 * This defines the fragment "Onboarding Screen" logic
-* Layout: fragment_onboarding_screen.xml
+* Layout: ui/OnboardingScreen.kt
 * */
 class OnboardingScreenFragment : Fragment() {
-
-	private var _binding: FragmentOnboardingScreenBinding? = null
-	private val binding get() = _binding!!
-
 	// launches the permission request and receives the result of the request (in this case, does nothing with the result)
 	private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ ->	}
 
@@ -116,30 +108,6 @@ class OnboardingScreenFragment : Fragment() {
 		}
 	}
 
-	/*
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-		super.onViewCreated(view, savedInstanceState)
-
-
-
-
-		val adapter = OnboardingAdapter(getOnboardPages(), onOnboardingFinish, onRequestNotificationPermission, onRequestAlarmPermission)
-		binding.viewPager.adapter = adapter
-
-		TabLayoutMediator(binding.tabLayout, binding.viewPager) { _, _ -> }.attach()
-	}
-	 */
-
-	private fun getOnboardPages(): List<OnboardPageItem> {
-		return listOf(
-			OnboardPageItem(getString(R.string.app_name), getString(R.string.onboard_1_description), R.drawable.app_icon_scaled),
-			OnboardPageItem(getString(R.string.onboard_2_title), getString(R.string.onboard_2_description), R.drawable.ic_task),
-			OnboardPageItem(getString(R.string.onboard_3_title), getString(R.string.onboard_3_description), R.drawable.ic_routine),
-			OnboardPageItem("Permission", "", 0),
-			OnboardPageItem("", "", 0)
-		)
-	}
-
 	private fun showPermissionRequestExplanationDialog() {
 		AlertDialog.Builder(requireActivity())
 			.setTitle(getString(R.string.notifications_permission))
@@ -159,10 +127,5 @@ class OnboardingScreenFragment : Fragment() {
 	override fun onStop() {
 		super.onStop()
 		(activity as? MainActivity)?.setUIVisibility(true)
-	}
-
-	override fun onDestroy() {
-		super.onDestroy()
-		_binding = null
 	}
 }
