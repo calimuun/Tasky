@@ -14,12 +14,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.calimuun.tasky.databinding.FragmentOnboardingScreenBinding
 import com.calimuun.tasky.recyclercomponents.OnboardingAdapter
+import com.calimuun.tasky.ui.OnboardingScreen
 import com.calimuun.tasky.utils.AppDataStore
 import com.calimuun.tasky.utils.OnboardPageItem
 import com.google.android.material.tabs.TabLayoutMediator
@@ -34,20 +37,12 @@ class OnboardingScreenFragment : Fragment() {
 
 	private var _binding: FragmentOnboardingScreenBinding? = null
 	private val binding get() = _binding!!
-	// lateinit var means that the variable will be initialized later
-	private lateinit var dataStore: AppDataStore
 
 	// launches the permission request and receives the result of the request (in this case, does nothing with the result)
 	private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ ->	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-		_binding = FragmentOnboardingScreenBinding.inflate(inflater, container, false)
-		return binding.root
-	}
-
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-		super.onViewCreated(view, savedInstanceState)
-		dataStore = AppDataStore(requireContext())
+		val dataStore = AppDataStore(requireContext())
 
 		val onOnboardingFinish: (String) -> Unit = { username ->
 			viewLifecycleOwner.lifecycleScope.launch {
@@ -86,7 +81,9 @@ class OnboardingScreenFragment : Fragment() {
 
 				// the permission was never asked before, so ask for it
 				else -> {
-					requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+						requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+					}
 				}
 			}
 		}
@@ -106,11 +103,32 @@ class OnboardingScreenFragment : Fragment() {
 			}
 		}
 
+		return ComposeView(requireContext()).apply {
+			setContent {
+				MaterialTheme { // TODO: verificar se precisa criar tema novo
+					OnboardingScreen(
+						onOnboardingFinish = onOnboardingFinish,
+						onRequestNotificationPermission = onRequestNotificationPermission,
+						onRequestAlarmPermission = onRequestAlarmPermission
+					)
+				}
+			}
+		}
+	}
+
+	/*
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+
+
+
+
 		val adapter = OnboardingAdapter(getOnboardPages(), onOnboardingFinish, onRequestNotificationPermission, onRequestAlarmPermission)
 		binding.viewPager.adapter = adapter
 
 		TabLayoutMediator(binding.tabLayout, binding.viewPager) { _, _ -> }.attach()
 	}
+	 */
 
 	private fun getOnboardPages(): List<OnboardPageItem> {
 		return listOf(
