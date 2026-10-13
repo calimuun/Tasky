@@ -22,7 +22,7 @@
 	<string name="delete_all_tasks_option">Apagar todas as tarefas</string>
 	<string name="delete_all_routines_option">Apagar todas as rotinas</string>
 	<string name="app_description">Um gerenciador de tarefas e rotina</string>
-	<string name="version">VERSÃO: v</string>
+	<string name="version">VERSÃO: v%1$s</string>
 	<string name="onboard_last_page_text">Digite o seu nome de usuário!</string>
 	<string name="onboard_last_page_button_text">Ir para minhas tarefas</string>
 	<string name="onboard_last_page_input_hint">Nome de usuário</string>
