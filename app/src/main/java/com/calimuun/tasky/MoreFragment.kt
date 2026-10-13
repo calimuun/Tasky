@@ -46,25 +46,6 @@ class MoreFragment : Fragment() {
 
 	private var requestAlarm: Boolean = false
 
-	// creates the ViewModel
-	// "by lazy" means that the ViewModel will be created only when it is needed (when the constant is called for the first time)
-	// by -> delegate the initialization for something
-	// lazy -> initialization method that is only called the first time the constant is called
-	val taskViewModel: TaskViewModel by lazy {
-		val app = requireActivity().application as App
-		val repository = TaskRepository(app.database, app.database.taskDao(), app.database.taskCompletedDao())
-		val factory = TaskViewModelFactory(app.database.taskDao(), repository)
-
-		ViewModelProvider(this, factory)[TaskViewModel::class.java]
-	}
-
-	val routineViewModel: RoutineViewModel by lazy {
-		val app = requireActivity().application as App
-		val factory = RoutineViewModelFactory(app.database.routineDao())
-
-		ViewModelProvider(this, factory)[RoutineViewModel::class.java]
-	}
-
 	// launches the permission request and receives the result of the request
 	private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
 		if (isGranted) {
@@ -161,20 +142,6 @@ class MoreFragment : Fragment() {
 			}
 		}
 
-		binding.deleteTasks.setOnClickListener {
-			showConfirmationDialog(
-				getString(R.string.delete_all_tasks_title),
-				getString(R.string.delete_all_tasks_message)
-			) { taskViewModel.deleteAllTasks() }
-		}
-
-		binding.deleteRoutines.setOnClickListener {
-			showConfirmationDialog(
-				getString(R.string.delete_all_routines_title),
-				getString(R.string.delete_all_routines_message)
-			) { routineViewModel.deleteAllRoutines() }
-		}
-
 		binding.receiveNotifications.setOnClickListener {
 			val hasNotificationPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 				ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
@@ -232,22 +199,6 @@ class MoreFragment : Fragment() {
 			}
 			startActivity(intent)
 		}
-	}
-
-	private fun showConfirmationDialog(title: String, message: String, onConfirm: () -> Unit) {
-		MaterialAlertDialogBuilder(requireContext())
-			.setTitle(title)
-			.setMessage(message)
-			.setNegativeButton(getString(R.string.cancel), null)
-			.setPositiveButton(getString(R.string.delete)) { _, _ ->
-				onConfirm()
-				Snackbar.make(
-					binding.root,
-					getString(R.string.deletion_completed),
-					Snackbar.LENGTH_SHORT
-				).show()
-			}
-			.show()
 	}
 
 	override fun onDestroyView() {

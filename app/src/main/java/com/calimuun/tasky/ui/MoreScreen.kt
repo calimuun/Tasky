@@ -17,7 +17,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
@@ -32,12 +36,15 @@ import com.calimuun.tasky.App
 import com.calimuun.tasky.BuildConfig
 import com.calimuun.tasky.R
 import com.calimuun.tasky.database.TaskRepository
+import com.calimuun.tasky.ui.utils.AlertDialogSimp
 import com.calimuun.tasky.ui.utils.OptionRow
 import com.calimuun.tasky.utils.AppDataStore
 import com.calimuun.tasky.viewmodel.RoutineViewModel
 import com.calimuun.tasky.viewmodel.RoutineViewModelFactory
 import com.calimuun.tasky.viewmodel.TaskViewModel
 import com.calimuun.tasky.viewmodel.TaskViewModelFactory
+
+private enum class DialogType { TASK, ROUTINE }
 
 @Composable
 fun MoreScreen() {
@@ -70,6 +77,9 @@ fun MoreScreen() {
 		val routineViewModel: RoutineViewModel = viewModel(
 			factory = RoutineViewModelFactory(db.routineDao())
 		)
+
+		var showDialog by remember { mutableStateOf(false) }
+		var dialogFor by remember { mutableStateOf(DialogType.TASK) }
 
 		// TODO: parte lógica dos botões, datastore, etc
 
@@ -182,7 +192,10 @@ fun MoreScreen() {
 				OptionRow(
 					mainIconResId = R.drawable.ic_delete_forever,
 					name = stringResource(id = R.string.delete_all_tasks_option),
-					onClick = {}
+					onClick = {
+						showDialog = true
+						dialogFor = DialogType.TASK
+					}
 				)
 
 				HorizontalDivider(
@@ -192,8 +205,44 @@ fun MoreScreen() {
 				OptionRow(
 					mainIconResId = R.drawable.ic_delete_forever,
 					name = stringResource(id = R.string.delete_all_routines_option),
-					onClick = {}
+					onClick = {
+						showDialog = true
+						dialogFor = DialogType.ROUTINE
+					}
 				)
+			}
+		}
+
+		if (showDialog) {
+			var positiveAction: () -> Unit
+			var dialogTitle: String
+			var dialogMessage: String
+
+			when (dialogFor) {
+				DialogType.TASK -> {
+					positiveAction = { taskViewModel.deleteAllTasks() }
+					dialogTitle = stringResource(R.string.delete_all_tasks_title)
+					dialogMessage = stringResource(R.string.delete_all_tasks_message)
+				}
+
+				DialogType.ROUTINE -> {
+					positiveAction = { routineViewModel.deleteAllRoutines() }
+					dialogTitle = stringResource(R.string.delete_all_routines_title)
+					dialogMessage = stringResource(R.string.delete_all_routines_message)
+				}
+			}
+
+			AlertDialogSimp(
+				title = dialogTitle,
+				positiveButtonText = stringResource(R.string.delete),
+				negativeButtonText = stringResource(R.string.cancel),
+				icon = painterResource(id = R.drawable.ic_delete_forever),
+
+				positiveButtonAction = positiveAction,
+				negativeButtonAction = { showDialog = false },
+				onDismissRequest = { showDialog = false }
+			) {
+				Text(text = dialogMessage)
 			}
 		}
 	}
