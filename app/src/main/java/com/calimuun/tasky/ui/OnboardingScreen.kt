@@ -24,6 +24,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,9 +35,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.calimuun.tasky.R
 import com.calimuun.tasky.ui.utils.OptionRow
@@ -156,12 +161,14 @@ fun NormalOnboardingPage(
 		Text(
 			text = title,
 			style = MaterialTheme.typography.displaySmall,
+			color = MaterialTheme.colorScheme.onSurface,
 			fontWeight = FontWeight.Bold
 		)
 
 		Text(
 			text = description,
-			style = MaterialTheme.typography.bodySmall
+			style = MaterialTheme.typography.bodySmall,
+			color = MaterialTheme.colorScheme.onSurface
 		)
 	}
 }
@@ -246,5 +253,19 @@ fun FinalOnboardingPage(
 		) {
 			Text(text = stringResource(R.string.onboard_last_page_button_text))
 		}
+	}
+}
+
+@Preview(
+	showBackground = true
+)
+@Composable
+fun PreviewOnboarding() {
+	MaterialTheme() {
+		OnboardingScreen(
+			onOnboardingFinish = {},
+			onRequestNotificationPermission = {},
+			onRequestAlarmPermission = {}
+		)
 	}
 }
